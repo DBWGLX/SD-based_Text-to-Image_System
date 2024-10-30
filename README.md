@@ -20,6 +20,15 @@
 
 此代码通过python的request库来发送post请求并储存返回的图片
 
+---
+
+# aicloud-openapi.jar
+
+> *Contributed By ShunQi Fan*
+
+此jar包运行时环境要求为jdk21版本及以上。
+
+监听本地5001端口，接收post请求的JSON格式数据。并将prompt字段的中文内容翻译成英文后返回全部内容。
 
 ---
 
