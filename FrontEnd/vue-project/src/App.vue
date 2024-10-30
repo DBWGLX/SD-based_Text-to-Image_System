@@ -11,6 +11,8 @@
       <!-- 添加登录链接 -->
       <br />
       <router-link to="/app">App</router-link>
+      <br />
+      <router-link to="/user">UserProfile</router-link>
     </div>
   </div>
 </template>
