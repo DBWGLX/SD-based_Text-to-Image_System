@@ -4,15 +4,23 @@
   <div id="app">
     <router-view></router-view>
 
-    <div class="router-links">
-      <router-link to="/">Home</router-link>
+    <div class="router-links"> 
+      <router-link to="/">
+        <el-link type="primary">Home</el-link>   <!-- 使用element组件美化 -->
+      </router-link>
       <br />
-      <router-link to="/login">Login</router-link>
+      <router-link to="/login">
+        <el-link type="primary">Login</el-link>  
+      </router-link>
       <!-- 添加登录链接 -->
       <br />
-      <router-link to="/app">App</router-link>
+      <router-link to="/app">
+        <el-link type="primary">App</el-link>  
+      </router-link>
       <br />
-      <router-link to="/user">UserProfile</router-link>
+      <router-link to="/user" >
+       <el-link type="primary">UserProfile</el-link>  
+      </router-link>
     </div>
   </div>
 </template>
