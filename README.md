@@ -8,9 +8,7 @@
 
 ### 1.test1.py
 
-*From flask, diffusers, datetime*
-
-这里是服务器代码。
+这里是服务器代码。*From flask, diffusers, datetime*
 
 若想运行，请在pipe处加载你的模型。
 
@@ -20,7 +18,12 @@
 
 此代码通过python的request库来发送post请求并储存返回的图片
 
+![image](https://github.com/user-attachments/assets/673d3967-e855-40b9-a5f9-39c56266da1a)
+
+
 ---
+
+<br>
 
 # aicloud-openapi.jar
 
@@ -30,7 +33,12 @@
 
 监听本地端口，具体端口号请在config.config文件中修改port的值，注意配置文件需要在jar包的同级目录下。接收post请求的JSON格式数据。并将prompt字段的中文内容翻译成英文后返回全部内容。
 
+![image](https://github.com/user-attachments/assets/fa97f47d-67b9-44c1-aaef-d686137dc18f)
+
+
+
 ---
 
+<br><br>
 
-![《新世纪福音战士》明日香动漫美女2k桌面壁纸_Huamao+wallpaper(en huamaobizhi com)](https://github.com/user-attachments/assets/638fec2e-f484-41f7-8561-49a86f6d101e)
+![](https://img0.baidu.com/it/u=4148068778,2767666820&fm=253&fmt=auto&app=138&f=JPEG?w=1339&h=800)
