@@ -10,7 +10,7 @@ const routes = [
   { path: '/', component: Home },
   { path: '/login', component: Login },// 添加登录路由
   { path: '/app', component: AppInterface, meta: { requiresAuth: true } }, // 需要身份验证的路由
-  { path: '/user', component: UserProfile, meta: { requiresAuth: true } }, // 个人信息页面
+  { path: '/user', component: UserProfile, meta: { requiresAuth: true } }, // 个人信息页面的路由
 ];
 
 const router = createRouter({
