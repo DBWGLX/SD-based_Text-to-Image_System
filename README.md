@@ -49,3 +49,19 @@
 <br><br>
 
 ![](https://img0.baidu.com/it/u=4148068778,2767666820&fm=253&fmt=auto&app=138&f=JPEG?w=1339&h=800)
+
+
+<br><br>
+徐一麟部分：
+数据库的使用：
+5个表（user，images，history，colors，admins）
+主要关系：
+user通过user_id连接images实现一对多
+user通过user_id连接history再通过history的image_id连接图像
+images和colors通过image_id连接,colors可能用得上，是保存image色系的表。
+
+使用方法：拉取下来文件后放在英文无空格的目录下，在你的数据库：mysql -u username -p dbname < path/to/your/file.sql
+
+
+
+
