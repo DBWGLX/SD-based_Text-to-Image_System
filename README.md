@@ -15,6 +15,7 @@
 
 ## Project Structure
 
-![alt text](image.png)
+
+![image](https://github.com/user-attachments/assets/2133bb27-dd1f-4046-a5eb-0d0ba321bab8)
 
 
