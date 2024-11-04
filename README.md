@@ -1,5 +1,8 @@
 # Diffusion-based Text-to-Image System
 
+![f15645f05c872c7b9682b25231e2c86c](https://github.com/user-attachments/assets/64f161ef-9e77-4706-9317-9140a536e494)
+
+
 ## Participants &nbsp;
 
 - YaXian Wang (lubenweiNBNBNBNB)
