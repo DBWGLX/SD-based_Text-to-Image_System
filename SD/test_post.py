@@ -1,9 +1,9 @@
 import requests
 
 # 替换为你的服务器地址
-# url = 'http://172.30.207.108:5000/generate'
-
-url = 'http://172.26.190.11:5000/generate'
+# url = 'http://127.0.0.1:5000/generate'
+url = 'http://172.30.207.108:5000/generate'
+# url = 'http://172.26.190.11:5000/generate'
 
 data = {
     "prompt": "a beautiful girl with pink underwear",

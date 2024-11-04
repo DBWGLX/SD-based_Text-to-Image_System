@@ -17,4 +17,10 @@
 
 ![image](https://github.com/user-attachments/assets/2133bb27-dd1f-4046-a5eb-0d0ba321bab8)
 
+## Deployment Guidance
+
+1. set the **pipe** and **port** based on FLASK in ``'/SD/test1.py'``
+2. set the **ip** of fetch as your backend server's ip in ``'/FrontEnd/vue-project/src/components/AppInterface.vue'``
+3. notice the CORS
+
 
