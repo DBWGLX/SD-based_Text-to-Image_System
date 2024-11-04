@@ -2,6 +2,10 @@
 
 > *Contributed By **YaXian Wang***
 
+### 0.requirements.txt
+
+执行```pip install -r requirements.txt```来安装此python代码执行所需依赖。
+
 ### 1.test1.py
 
 这里是服务器代码。*From flask, diffusers, datetime*
@@ -10,7 +14,7 @@
 
 ### 2.test_post.py
 
-发送post请求。
+发送post请求来测试。
 
 此代码通过python的request库来发送post请求并储存返回的图片
 
@@ -24,7 +28,9 @@
 
 
 
+# getColor.py
 
+> *Contributed By **YuRan Fang***
 
 提取色素的RGB：
 
