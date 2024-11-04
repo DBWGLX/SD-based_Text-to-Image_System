@@ -20,4 +20,17 @@
 
 <br><br>
 
-![](https://img0.baidu.com/it/u=4148068778,2767666820&fm=253&fmt=auto&app=138&f=JPEG?w=1339&h=800)
+![](C:\Users\86133\Desktop\24-25深大\岗位实践\Project\Myproject\imgs\test.png)
+
+
+
+
+
+提取色素的RGB：
+
+利用python的tkinter创建一个简单的程序，打开一个窗口，处理图片文件。（但是我不太知道应用场景是什么，不知道如何集成起来。）
+
+接口 `ImageColorPicker(file_Path)` 就会打开一个窗口，点击某位置就能提示其rgb,(背景颜色就是其颜色)  这里如果点到白色就...（应该没人点白色吧）
+
+![image-20241104154446332](https://raw.githubusercontent.com/Rosewwwfr/blog-imgs/main/blog/image-20241104154446332.png)
+
