@@ -40,21 +40,21 @@ class ImageColorPicker(tk.Tk):
             self.show_color_dialog(rgb, color)
 
     def show_color_dialog(self, rgb, color):
-        # # 创建一个提示框
-        # color_dialog = tk.Toplevel(self)
-        # color_dialog.title(f"Color at ({rgb[0]}, {rgb[1]},{rgb[2]})")
-        # color_dialog.geometry("200x100")
+        # 创建一个提示框
+        color_dialog = tk.Toplevel(self)
+        color_dialog.title(f"Color at ({rgb[0]}, {rgb[1]},{rgb[2]})")
+        color_dialog.geometry("200x100")
 
-        # # 设置背景颜色
-        # color_dialog.configure(bg=f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}")
+        # 设置背景颜色
+        color_dialog.configure(bg=f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}")
 
-        # # 显示 RGB 值
-        # label = tk.Label(color_dialog, text=color, bg=color_dialog['bg'], fg='white', font=('Arial', 12))
-        # label.pack(pady=20)
+        # 显示 RGB 值
+        label = tk.Label(color_dialog, text=color, bg=color_dialog['bg'], fg='white', font=('Arial', 12))
+        label.pack(pady=20)
 
-        # # 关闭按钮
-        # button = tk.Button(color_dialog, text="Close", command=color_dialog.destroy)
-        # button.pack()
+        # 关闭按钮
+        button = tk.Button(color_dialog, text="Close", command=color_dialog.destroy)
+        button.pack()
         def show_color_dialog(self, rgb, color):
         # 更新颜色框的背景色
             hex_color = f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}"
