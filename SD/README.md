@@ -12,6 +12,21 @@
 
 若想运行，请在pipe处加载你的模型。
 
+接受POST传JOSN参
+'/generate'
+```
+{
+  "prompt"
+  "negative_prompt"
+  "num_inference_steps"
+  "width"
+  "height"
+  "guidance_scale"
+  "seed"
+}
+```
+
+
 ### 2.test_post.py
 
 发送post请求来测试。
