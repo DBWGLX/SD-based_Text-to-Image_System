@@ -50,3 +50,75 @@ back.sql文件概述
 
 
 二.
+# MybatisConfigurer 配置类简介
+
+## 功能概述
+
+`MybatisConfigurer` 是一个Spring Boot配置类，主要用于配置MyBatis、Mapper和PageHelper。以下是其主要功能和代码结构的简要介绍。
+
+## 主要功能
+
+1. **SqlSessionFactory配置**
+   - 设置数据源。
+   - 设置实体类包。
+   - 配置分页插件PageHelper。
+   - 指定映射文件位置。
+
+2. **MapperScannerConfigurer配置**
+   - 设置SqlSessionFactory的Bean名称。
+   - 设置Mapper接口包。
+   - 配置通用Mapper属性。
+
+## 代码结构
+
+### SqlSessionFactory配置
+
+```java
+@Bean
+public SqlSessionFactory sqlSessionFactoryBean(DataSource dataSource) throws Exception {
+    SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
+    factory.setDataSource(dataSource);
+    factory.setTypeAliasesPackage(ProjectConstant.MODEL_PACKAGE);
+
+    PageHelper pageHelper = new PageHelper();
+    Properties properties = new Properties();
+    properties.setProperty("pageSizeZero", "true");
+    properties.setProperty("reasonable", "true");
+    properties.setProperty("supportMethodsArguments", "true");
+    pageHelper.setProperties(properties);
+
+    factory.setPlugins(new Interceptor[]{pageHelper});
+    factory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
+    return factory.getObject();
+}
+```
+
+### MapperScannerConfigurer配置
+
+```java
+@Bean
+public MapperScannerConfigurer mapperScannerConfigurer() {
+    MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
+    mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBean");
+    mapperScannerConfigurer.setBasePackage(ProjectConstant.MAPPER_PACKAGE);
+
+    Properties properties = new Properties();
+    properties.setProperty("mappers", ProjectConstant.MAPPER_INTERFACE_REFERENCE);
+    properties.setProperty("notEmpty", "false");
+    properties.setProperty("IDENTITY", "MYSQL");
+    mapperScannerConfigurer.setProperties(properties);
+
+    return mapperScannerConfigurer;
+}
+```
+
+## 关键点
+
+- **数据源**：配置数据源连接。
+- **实体类包**：设置实体类所在包。
+- **分页插件**：配置PageHelper支持分页。
+- **映射文件**：指定XML映射文件位置。
+- **Mapper接口包**：设置Mapper接口所在包。
+- **通用Mapper**：配置通用Mapper属性。
+```
+
