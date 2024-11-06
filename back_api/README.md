@@ -1,3 +1,7 @@
+效果演示：
+![image](https://github.com/user-attachments/assets/9abdeefd-656e-49bd-a578-fcc29892b699)
+
+
 一.数据库设计
 back.sql文件概述
 
@@ -42,4 +46,7 @@ back.sql文件概述
 
 3. **验证结果**:
    - 完成导入后，可以通过查询`admins`表来验证数据是否正确无误地导入到了新的数据库中。
+![image](https://github.com/user-attachments/assets/d0ce4093-682d-4fd6-ab4b-eb023798cb18)
 
+
+二.
