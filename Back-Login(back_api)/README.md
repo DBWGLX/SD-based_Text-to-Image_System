@@ -123,36 +123,15 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
 - **通用Mapper**：配置通用Mapper属性。
 ```
 
+（未完）
 
-```markdown
-# 登录组件 (Login.vue)
+#n.接口与前端交互
 
-## 代码结构
+## 对应登录组件 (Login.vue)
+<img width="1383" alt="dfd01355d3d80c45aea87ba1ede88ed" src="https://github.com/user-attachments/assets/b97b85f9-fcb0-4016-950a-8f4733d7582b">
+
 
 该代码段位于 `FrontEnd/vue-project/src/components/Login.vue` 文件中，主要实现了登录功能。以下是关键部分的详细说明：
-
-### 方法定义 (`methods:`)
-```javascript
-login() {
-    // 假设验证逻辑
-    if (this.username !== '' && this.password !== '') {
-        loginApi({
-            username: this.username,
-            password: this.password,
-            role: 1,   // 登录方法
-        })
-        .then((response) => {
-            const { token, user } = response.data;
-            localStorage.setItem("accessToken", token); // Bearer eyJhbGci0iJIUzI1NiJ
-            localStorage.setItem('isAuthenticated', 'true'); // 设置登录状态
-            this.$router.push('/app'); // 登录成功后重定向到应用界面
-        })
-        .catch((error) => {
-            this.errorMessage = error;
-        });
-    }
-}
-```
 
 ### 解释
 
