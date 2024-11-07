@@ -123,9 +123,7 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
 - **通用Mapper**：配置通用Mapper属性。
 ```
 
-（未完）
-
-```markdown
+```
 # 接口与前端交互
 
 ## 1. 对应登录组件 (Login.vue)
@@ -189,5 +187,4 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
    这个`loginApi`函数主要用于向后端发送登录请求。当用户填写完登录表单并点击“登录”按钮时，前端会调用这个函数，传递用户的登录信息（如用户名和密码），然后等待后端返回的响应结果。
 ```
 
-
-
+这样就将代码和描述整理成了Markdown文档格式。希望这对你有帮助！
