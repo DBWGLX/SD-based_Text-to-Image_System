@@ -123,8 +123,11 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
 - **通用Mapper**：配置通用Mapper属性。
 ```
 
+（未完）
+
 ```
-# 接口与前端交互
+N.
+# 前端交互与后端接口
 
 ## 1. 对应登录组件 (Login.vue)
 
@@ -185,6 +188,67 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
 
 3. **用途：**
    这个`loginApi`函数主要用于向后端发送登录请求。当用户填写完登录表单并点击“登录”按钮时，前端会调用这个函数，传递用户的登录信息（如用户名和密码），然后等待后端返回的响应结果。
+
+   
 ```
 
-这样就将代码和描述整理成了Markdown文档格式。希望这对你有帮助！
+```
+3.
+# AuthController 代码简介
+
+
+![ff353f7e75a63c9a832b582e3f28be1](https://github.com/user-attachments/assets/f76bfb4d-23db-4418-9053-9bbfeb931928)
+
+## 类名：AuthController
+
+这是一个Java控制器类，负责处理与认证相关的HTTP请求。
+
+## 方法：login
+
+### 描述
+- 此方法处理POST请求，路径为`/login`。
+- 接收两个参数：`username`（用户名）和`password`（密码）。
+
+### 功能
+1. **查询用户**：
+   - 使用`adminService`查询数据库中是否存在对应的用户名。
+   
+2. **验证密码**：
+   - 检查获取到的用户对象的密码是否与输入的密码相匹配。
+   - 若用户名不存在或密码不匹配，返回失败结果。
+
+3. **创建用户对象**：
+   - 创建一个新的`User`对象，并将其ID和用户名设置为从数据库中获取的值。
+
+4. **生成令牌**：
+   - 使用`TokenUtil`工具类生成一个令牌（token），并将令牌添加到结果映射中。
+
+5. **返回结果**：
+   - 若一切正常，返回成功结果，并附带生成的令牌。
+   - 若发生异常，捕获异常并打印堆栈跟踪。
+
+### 代码示例
+```
+public class AuthController {
+
+    @PostMapping("/login")
+    public Result login(@RequestParam String username, @RequestParam String password) {
+        Admins admins = adminService.findByUsername(username);
+        if (admins == null || !admins.getPassword().equals(password)) {
+            return ResultGenerator.genFailResult("用户名或密码错误");
+        }
+
+        User user = new User();
+        user.setId(admins.getId());
+        user.setUsername(admins.getUsername());
+
+        Map<String, Object> map = new HashMap<>();
+        try {
+            map.put("token", TokenUtil.createToken(user.getId() + ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResultGenerator.genSuccessResult(map).setMessage("登录成功");
+    }
+}
+```
