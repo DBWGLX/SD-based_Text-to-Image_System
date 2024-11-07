@@ -227,28 +227,103 @@ N.
    - 若一切正常，返回成功结果，并附带生成的令牌。
    - 若发生异常，捕获异常并打印堆栈跟踪。
 
-### 代码示例
 ```
-public class AuthController {
 
-    @PostMapping("/login")
-    public Result login(@RequestParam String username, @RequestParam String password) {
-        Admins admins = adminService.findByUsername(username);
-        if (admins == null || !admins.getPassword().equals(password)) {
-            return ResultGenerator.genFailResult("用户名或密码错误");
-        }
+```
+3.
+# TokenInterceptor 代码简要介绍
 
-        User user = new User();
-        user.setId(admins.getId());
-        user.setUsername(admins.getUsername());
+## 
 
-        Map<String, Object> map = new HashMap<>();
-        try {
-            map.put("token", TokenUtil.createToken(user.getId() + ""));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResultGenerator.genSuccessResult(map).setMessage("登录成功");
-    }
-}
+## 类名：TokenInterceptor
+
+### 注解
+
+- `@Component`: 标记为Spring管理的Bean。
+- `@Slf4j`: 引入Lombok的日志功能。
+
+### 字段
+
+- `@Resource private AdminsService adminsService;`: 通过Spring注入`AdminsService`服务。
+
+### 方法
+
+#### `preHandle`
+
+- **描述**:
+  - 在请求处理之前执行，用于验证请求头中的令牌。
+  - 如果令牌无效或过期，返回错误响应。
+  - 如果令牌有效，将用户信息设置到请求属性中。
+
+- **逻辑**:
+  1. 获取请求头中的`Authorization`字段。
+  2. 检查令牌是否为空。
+  3. 从令牌中解析用户ID和过期时间。
+  4. 检查用户ID和过期时间是否为空。
+  5. 查询数据库以获取用户信息。
+  6. 检查用户是否存在。
+  7. 比较当前时间和令牌的过期时间。
+  8. 如果令牌有效，将用户信息设置到请求属性中。
+  9. 记录用户登录信息。
+
+- **代码示例**:
+  ```java
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+      String token = request.getHeader("Authorization");
+      if (StringUtils.isEmpty(token)) {
+          retResponse(response, ResultCode.TOKEN_ERROR, ResultMassage.TOKEN_ERROR.msg());
+          return false;
+      }
+      String userId = TokenUtil.getAcUserId(token);
+      Date expTime = TokenUtil.getExpTime(token);
+      if (userId == null || expTime == null) {
+          retResponse(response, ResultCode.TOKEN_ERROR, ResultMassage.TOKEN_ERROR.msg());
+          return false;
+      }
+      User tuUser = null;
+      Admins admins = adminsService.findById(userId);
+      if (admins != null) {
+          tuUser = new User();
+          tuUser.setId(admins.getId());
+          tuUser.setUsername(admins.getUsername());
+      }
+      if (tuUser == null) {
+          retResponse(response, ResultCode.TOKEN_ERROR, ResultMassage.TOKEN_ERROR.msg());
+          return false;
+      }
+      int compare = DateUtils.truncatedCompareTo(new Date(), expTime, Calendar.MILLISECOND);
+      if (compare == 1 || compare == 0) {
+          retResponse(response, ResultCode.TOKEN_ERROR, ResultMassage.TOKEN_ERROR.msg());
+          return false;
+      }
+      request.setAttribute("loginUser", tuUser);
+      log.info("已登录,用户信息为{}", tuUser.getUsername());
+      return true;
+  }
+  ```
+
+#### `retResponse`
+
+- **描述**:
+  - 用于构建并返回错误响应。
+
+- **逻辑**:
+  1. 创建一个`Result`对象，设置状态码和消息。
+  2. 设置响应的字符编码和内容类型。
+  3. 将结果转换为JSON字符串并写入响应。
+
+- **代码示例**:
+  ```java
+  private void retResponse(HttpServletResponse response, ResultCode code, String message) throws IOException {
+      Result result = new Result();
+      result.setCode(code).setMessage(message);
+      response.setCharacterEncoding("UTF-8");
+      response.setHeader("Content-type", "application/json;charset=UTF-8");
+      response.setStatus(200);
+      response.getWriter().write(JSON.toJSONString(result));
+  }
+  ```
+
+
 ```
