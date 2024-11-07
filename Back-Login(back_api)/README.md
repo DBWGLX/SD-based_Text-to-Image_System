@@ -230,8 +230,13 @@ N.
 ```
 
 ```
-3.
+4.
 # TokenInterceptor 代码简要介绍
+
+
+<img width="624" alt="72f8b172035be863a482e7dce28afb0" src="https://github.com/user-attachments/assets/30a761da-e7ee-4fd4-a7d8-82e835da7f5e">
+
+
 
 ## 
 
