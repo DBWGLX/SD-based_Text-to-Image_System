@@ -125,11 +125,12 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
 
 （未完）
 
-#n.接口与前端交互
+```markdown
+# 接口与前端交互
 
-## 对应登录组件 (Login.vue)
-<img width="1383" alt="dfd01355d3d80c45aea87ba1ede88ed" src="https://github.com/user-attachments/assets/b97b85f9-fcb0-4016-950a-8f4733d7582b">
+## 1. 对应登录组件 (Login.vue)
 
+![Login.vue](https://github.com/user-attachments/assets/b97b85f9-fcb0-4016-950a-8f4733d7582b)
 
 该代码段位于 `FrontEnd/vue-project/src/components/Login.vue` 文件中，主要实现了登录功能。以下是关键部分的详细说明：
 
@@ -152,12 +153,13 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
 - **错误处理 (`catch`):**
   - 失败时，将错误信息赋值给 `this.errorMessage` 变量。
 
-
 通过以上步骤，可以实现一个基本的登录功能，并在登录成功后自动跳转至指定页面。
 
+## 2. index.js 文件
 
+![index.js](https://github.com/user-attachments/assets/174dc65a-b287-4941-9c85-1bd72e5bb983)
 
-**代码解释：**
+### 代码解释
 
 这段代码是一个Vue.js项目的API模块中的登录接口实现。它使用了axios库来发起HTTP请求。
 
@@ -185,5 +187,7 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
 
 3. **用途：**
    这个`loginApi`函数主要用于向后端发送登录请求。当用户填写完登录表单并点击“登录”按钮时，前端会调用这个函数，传递用户的登录信息（如用户名和密码），然后等待后端返回的响应结果。
+```
+
 
 
