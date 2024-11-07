@@ -124,16 +124,37 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
 ```
 
 
-
-
-五. 接口及前端交互
-1.
-
-![Uploading dfd01355d3d80c45aea87ba1ede88ed.png…]()
-
-
+```markdown
 # 登录组件 (Login.vue)
 
+## 代码结构
+
+该代码段位于 `FrontEnd/vue-project/src/components/Login.vue` 文件中，主要实现了登录功能。以下是关键部分的详细说明：
+
+### 方法定义 (`methods:`)
+```javascript
+login() {
+    // 假设验证逻辑
+    if (this.username !== '' && this.password !== '') {
+        loginApi({
+            username: this.username,
+            password: this.password,
+            role: 1,   // 登录方法
+        })
+        .then((response) => {
+            const { token, user } = response.data;
+            localStorage.setItem("accessToken", token); // Bearer eyJhbGci0iJIUzI1NiJ
+            localStorage.setItem('isAuthenticated', 'true'); // 设置登录状态
+            this.$router.push('/app'); // 登录成功后重定向到应用界面
+        })
+        .catch((error) => {
+            this.errorMessage = error;
+        });
+    }
+}
+```
+
+### 解释
 
 - **登录函数 (`login()`):**
   - 首先检查用户名和密码是否为空。
@@ -152,25 +173,9 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
 - **错误处理 (`catch`):**
   - 失败时，将错误信息赋值给 `this.errorMessage` 变量。
 
-2.
 
-![Uploading 945851350a9a05199aff9da24237824.png…]()
+通过以上步骤，可以实现一个基本的登录功能，并在登录成功后自动跳转至指定页面。
 
-
-```js
-import request from '@/utils/request';
-
-/**
- * @param data 用户名和密码等参数
- */
-export function loginApi(data) {
-  return request({
-    url: '/auth/login',
-    method: 'POST',
-    params: data
-  });
-}
-```
 
 
 **代码解释：**
@@ -202,6 +207,4 @@ export function loginApi(data) {
 3. **用途：**
    这个`loginApi`函数主要用于向后端发送登录请求。当用户填写完登录表单并点击“登录”按钮时，前端会调用这个函数，传递用户的登录信息（如用户名和密码），然后等待后端返回的响应结果。
 
-4. **注意点：**
-   - 确保后端服务已经正确地设置了`/auth/login`这个路由，并且能够接收POST请求。
-   - `params`参数应该根据后端的要求进行调整，如果后端要求JSON格式的数据，可能需要使用`data`而不是`params`。
+
