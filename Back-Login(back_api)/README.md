@@ -129,8 +129,10 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
 五.
 ### 接口及前端交互
 1.
-<img width="1383" alt="dfd01355d3d80c45aea87ba1ede88ed" src="https://github.com/user-attachments/assets/8b7561b7-6e99-4a47-b58e-3c92fcd0c12a">
-```markdown
+
+![Uploading dfd01355d3d80c45aea87ba1ede88ed.png…]()
+
+
 # 登录组件 (Login.vue)
 
 
@@ -152,6 +154,10 @@ public MapperScannerConfigurer mapperScannerConfigurer() {
   - 失败时，将错误信息赋值给 `this.errorMessage` 变量。
 
 2.
+
+![Uploading 945851350a9a05199aff9da24237824.png…]()
+
+
 ```js
 import request from '@/utils/request';
 
@@ -166,6 +172,8 @@ export function loginApi(data) {
   });
 }
 ```
+
+
 **代码解释：**
 
 这段代码是一个Vue.js项目的API模块中的登录接口实现。它使用了axios库来发起HTTP请求。
