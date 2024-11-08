@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
 
+
 @Service
 public class ImageEditService {
 
@@ -97,5 +98,9 @@ public class ImageEditService {
     private int adjustContrast(int pixelValue, int contrast) {
         int adjustedValue = (pixelValue * (100 + contrast)) / 100;
         return Math.min(255, Math.max(0, adjustedValue));
+    }
+
+    public String getEditedImagePath() {
+        return "edited_image.png";
     }
 }

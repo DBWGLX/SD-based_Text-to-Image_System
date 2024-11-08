@@ -6,12 +6,21 @@
 
 前后端的交互：
 1.后端定义了一个API接口 /api/edit/image，接收一个 ImageEditRequest 对象，包含图像路径和编辑参数
+
 ![image](https://github.com/user-attachments/assets/3411afea-10ab-4c0d-9d42-3096b2fd3fcf)
+
 2.前端需要发送一个包含图像编辑请求的HTTP POST请求到后端的 /api/edit/image 接口，用axios库发送请求
+
 3.由于图像文件通常较大，一般需要使用 FormData 来构建请求体
+
 ![image](https://github.com/user-attachments/assets/8850b046-e62c-4a99-87ec-c398ce7834af)
+
 我自己在测试的时候，用的是raw的json传参
+
 ![image](https://github.com/user-attachments/assets/e682dd21-03d7-4117-aab0-604263ea42c2)
+
+
+
 4.最后  后端返回的响应中包含编辑后的图像URL，前端可以使用这个URL来展示编辑之后的图像
 
 不过前端get我没写好，ddl有点多估计需要8.9号搞
@@ -40,4 +49,5 @@ json格式写入图片的url路径
 ![image](https://github.com/user-attachments/assets/8cdc6963-9ed6-4413-bbe5-28b2aa7264f2)
 这是对比图，我理解的二次编辑加工就是改变亮度、对比度、像素
 对于yaxian哥在群里发的二次编辑视频，暂时还不会，后面再参考些模型学习改动吧
+
 ![image](https://github.com/user-attachments/assets/a1f6c57d-e462-435d-b878-1df9e86ef6df)
