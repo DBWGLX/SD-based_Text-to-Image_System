@@ -1,4 +1,4 @@
-# **/二次编辑加工**
+![image](https://github.com/user-attachments/assets/b38b993e-7ea1-413a-925c-1c95f26e4047)# **/二次编辑加工**
 
 *Contributed By* YongNan Zhou
 
@@ -27,7 +27,9 @@
 
 比如window.open('http://localhost:8080/api/image/edited','_blank');
 
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/0f3a4b7a-4abd-4059-9ec7-16f7b560a919)
+
+
 
 
 内容:
