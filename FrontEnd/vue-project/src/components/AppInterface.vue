@@ -8,6 +8,7 @@
         <div class="upper">
           <div class="prompt">
             <label for="prompt" class="input-label">Prompt:</label>
+            <!-- image的prompt -->
             <input
               id="prompt"
               type="text"
@@ -15,6 +16,7 @@
               placeholder="Input your prompt"
               class="text-input"
             />
+            <!-- image的negative_prompt -->
             <label for="negative_prompt" class="input-label">Negative Prompt:</label>
             <input
               id="negative_prompt"
@@ -23,50 +25,101 @@
               placeholder="Input your negative prompt"
               class="text-input"
             />
-            <label for="num_inference_steps" class="input-label">Number of Inference Steps:</label>
+            <!-- image的num_inference_steps -->
+            <div class="input-group">
+              <label for="num_inference_steps" class="input-label">Number of Inference Steps:</label>
+              <input
+                type="number"
+                v-model="num_inference_steps"
+                min="1"
+                max="50"
+                step="1"
+                class="control-input"
+              />    
+              </div>
             <input
               id="num_inference_steps"
-              type="number"
+              type="range"
               v-model="num_inference_steps"
               placeholder="Number of Inference Steps"
               class="text-input"
               min="1"
+              max="50"
+              step="1"
             />
-            <label for="width" class="input-label">Width:</label>
+            <!-- image的宽度 -->
+            <!-- 确保label和control-input在同一行 -->
+            <div class="input-group">
+              <label for="width" class="input-label">Width:</label>
+              <input
+                type="number"
+                v-model="width"
+                class="control-input"
+                min="1"
+                max="1920"
+              />
+            </div>
             <input
               id="width"
-              type="number"
+              type="range"
               v-model="width"
-              placeholder="Width"
               class="text-input"
               min="1"
+              max="1920"
+              step="1"
             />
-            <label for="height" class="input-label">Height:</label>
+            <!-- image的高度 -->
+            <div class="input-group">
+                <label for="height" class="input-label">Height:</label>
+                <input
+                  id="height"
+                  type="number"
+                  v-model="height"
+                  class="control-input"
+                  min="1"
+                  max="1920"
+                />
+            </div>
             <input
-              id="height"
-              type="number"
-              v-model="height"
-              placeholder="Height"
-              class="text-input"
-              min="1"
+                  id="height"
+                  type="range"
+                  v-model="height"
+                  class="text-input"
+                  min="1"
+                  max="1920"
             />
+            <!-- img 的seed -->
             <label for="seed" class="input-label">Seed (leave blank for random):</label>
-            <input
-              id="seed"
-              type="number"
-              v-model="seed"
-              placeholder="Seed (leave blank for random)"
-              class="text-input"
-              min="0"
-            />
-            <label for="guidance_scale" class="input-label">Guidance Scale:</label>
+            <div class="seed-group">
+              <input
+                id="seed"
+                type="number"
+                v-model="seed"
+                class="text-input"
+                min="0"
+                max="999999"
+              />
+              <button class="input-button" @click="generateRandomSeed"><img :src="rollingDiceIconPath" alt="" class="rollingDiceIcon"/></button>
+            </div>
+
+            <!-- img的guidance_scale -->
+            <div class="input-group">
+              <label for="guidance_scale" class="input-label">Guidance Scale:</label>
+              <input
+                type="number"
+                v-model="guidance_scale"
+                class="control-input"
+                min="1"
+                max="15"
+                />
+            </div>
             <input
               id="guidance_scale"
-              type="number"
+              type="range"
               v-model="guidance_scale"
-              placeholder="Guidance Scale"
               class="text-input"
               min="1"
+              max="15"
             />
           </div>
           <div class="submit-button">
@@ -90,6 +143,7 @@
 </template>
 
 <script>
+import rollingDiceIcon from '@/assets/rollingDiceIcon.svg'; // 使用 import 引入 SVG 文件
 export default {
   data() {
     return {
@@ -100,6 +154,7 @@ export default {
       height: 512, // 默认值
       seed: null, // 默认值
       guidance_scale: 7.5, // 默认值
+      rollingDiceIconPath: rollingDiceIcon,
       imageUrl: 'https://webcnstatic.yostar.net/ba_cn_web/prod/upload/wallpaper/dMIq1HzJ.jpeg', // 初始图片 URL
       isGenerating: false, // 用于控制按钮显示
     };
@@ -138,6 +193,10 @@ export default {
         this.isGenerating = false; // 请求完成后恢复按钮文本
       }
     },
+
+    generateRandomSeed(){
+      this.seed = Math.floor(Math.random()*999999) + 1;
+    }
   },
 };
 </script>
@@ -237,5 +296,55 @@ export default {
   max-height: 100%;
   width: auto;
   height: auto;
+}
+
+/*这个class确保属性输入框的label和control-input在同一行*/
+.input-group {
+  display: flex;
+}
+
+.control-input {
+  text-align: center;
+  margin-left: auto;
+  width: 80px;
+  height: 25px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  border-color: #ccc;
+}
+
+.input-button {
+  background-color: #ccc;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 5px; /* 圆角 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seed-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* 图标样式 */
+.rollingDiceIcon {
+  width: 24px;  /* 根据需求调整图标大小 */
+  height: 24px;
+}
+
+.input-button:hover {
+  background-color: #f2f2f2;
+}
+
+
+/* 不管是否悬浮在control-input上都展示大小调节的按钮 */
+/* WebKit 浏览器内核的调整按钮 */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1; /* 设置不透明 */
+  display: block; /* 确保按钮显示 */
 }
 </style>
