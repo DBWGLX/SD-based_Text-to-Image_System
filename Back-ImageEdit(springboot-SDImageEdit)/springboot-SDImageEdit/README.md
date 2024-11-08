@@ -23,7 +23,12 @@
 
 4.最后  后端返回的响应中包含编辑后的图像URL，前端可以使用这个URL来展示编辑之后的图像
 
-不过前端get我没写好，ddl有点多估计需要8.9号搞
+前端img中src设置"http://localhost:8080/api/image/edited"可以直接展示图片比如<img src="http://localhost:8080/api/image/edited" alt="Image">也可以直接控制浏览器下载图片
+
+比如window.open('http://localhost:8080/api/image/edited','_blank');
+
+![Uploading image.png…]()
+
 
 内容:
 
