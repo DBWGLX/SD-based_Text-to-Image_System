@@ -1,9 +1,12 @@
 package com.llxx.mapper;
 
 import com.llxx.pojo.images;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface imagesMapper {
@@ -18,4 +21,7 @@ public interface imagesMapper {
     //通过Url查询imageId
     @Select("select image_id from images where image_url=#{imageUrl}")
     Integer selectByUrl(String imageUrl);
+
+    //通过ids删除
+    void delete(List<Integer> imageIds);
 }
