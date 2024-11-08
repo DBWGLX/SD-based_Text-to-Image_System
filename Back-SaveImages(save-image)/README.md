@@ -2,6 +2,8 @@
 
 *Contributed By:*  Yilin Xu <br>
 
+**前端返回**：一个图像数据（userId，imageUrl）封装在图像类中。<br>
+
 **测试配置**：将配置文件application.yml中的数据库连接自己的。<br>
 
 **测试：**
