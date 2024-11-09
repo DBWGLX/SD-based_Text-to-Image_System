@@ -1,30 +1,42 @@
-# Getting Started
+# **/TOTP二次验证**
 
-### Reference Documentation
+*Contributed By:*  Yilin Xu <br><br>
 
-For further reference, please consider the following sections:
+**测试准备工作：**
+![image](https://github.com/user-attachments/assets/81fcae32-dfaf-4dc6-a74b-994ae40e0d44)
+![image](https://github.com/user-attachments/assets/9d6f8ad4-0a5c-4829-94e4-0241cb993f22)
+<br><br>
+**测试流程：** <br>
+**1.登录：**  
+接口：/api/auth/login  -  请求参数：user
+![image](https://github.com/user-attachments/assets/ca4a9a18-dbbf-40ae-b9f7-654d910e149e)
+<br><br>
+**2.发送验证码到邮箱：**
+接口：/api/auth/totp/email  -  请求参数：token
+![image](https://github.com/user-attachments/assets/0ba978b5-a5ba-4c41-a448-d230acb5bac1)
+![image](https://github.com/user-attachments/assets/ea45d343-eea1-4950-bfb8-5ebb782d1687)
+<br><br>
+**3.二次验证：**
+接口：/api/auth/totp/enable  -  请求参数：（email，验证码）<br>
+注意：60秒超时，验证码失效，需要重新发。
+![image](https://github.com/user-attachments/assets/bbd56aac-8132-4ddb-bad4-db1c173bd385)
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/3.3.5/maven-plugin)
-* [Create an OCI image](https://docs.spring.io/spring-boot/3.3.5/maven-plugin/build-image.html)
-* [MyBatis Framework](https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
-* [Spring Web](https://docs.spring.io/spring-boot/3.3.5/reference/web/servlet.html)
 
-### Guides
 
-The following guides illustrate how to use some features concretely:
 
-* [MyBatis Quick Start](https://github.com/mybatis/spring-boot-starter/wiki/Quick-Start)
-* [Accessing data with MySQL](https://spring.io/guides/gs/accessing-data-mysql/)
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
 
-### Maven Parent overrides
 
-Due to Maven's design, elements are inherited from the parent POM to the project POM.
-While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the
-parent.
-To prevent this, the project POM contains empty overrides for these elements.
-If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
