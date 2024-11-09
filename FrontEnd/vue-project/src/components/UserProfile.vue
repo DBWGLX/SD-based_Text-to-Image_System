@@ -13,16 +13,16 @@
       </el-aside>
 
       <el-container>
-        <el-header>
+        <!-- <el-header>
           用户中心
-        </el-header>
+        </el-header> -->
 
         <el-main>
           <div class="profile-section">
             <div class="avatar-container">
               <!-- 头像 -->
-              <img  style="width: 150px; height: 150px;">
-              <el-button plain class="edit-avatar-btn">修改头像</el-button>
+              <img src="https://img.zcool.cn/community/04b4wf2hltswlkpp4qebcs3937.png" style="width: 150px; height: 150px;">
+              <el-button plain class="edit-avatar-btn" @click="showEditAvatarModal">修改头像</el-button>
             </div>
 
             <el-divider border-style="double" />
@@ -32,8 +32,11 @@
                 <div class="item-title">
                   <el-text class="mx-1">姓名</el-text>
                 </div>
-                <div class="item-value">{{ userInfo.name }}</div>
-                <el-button plain class="edit-btn">编辑</el-button>
+                <div class="item-value">{{ editingName ? '' : userInfo.name }}</div>
+                <el-button plain class="edit-btn" @click="toggleEditName">编辑</el-button>
+                <el-input v-if="editingName" v-model="newName" placeholder="请输入新姓名" class="edit-input"
+                  @keyup.enter="saveName"></el-input>
+                <el-button v-if="editingName" type="primary" @click="saveName">保存</el-button>
               </div>
 
               <el-divider border-style="double" />
@@ -43,7 +46,7 @@
                   <el-text class="mx-1">用户ID</el-text>
                 </div>
                 <div class="item-value">{{ userInfo.id }}</div>
-                <el-button plain class="copy-btn">复制</el-button>
+                <el-button plain class="copy-btn" @click="copyToClipboard(userInfo.id)">复制</el-button>
               </div>
 
               <el-divider border-style="double" />
@@ -53,7 +56,7 @@
                   <el-text class="mx-1">手机号</el-text>
                 </div>
                 <div class="item-value">{{ userInfo.phoneNumber }}</div>
-                <el-button plain class="bind1-btn">立即绑定</el-button>
+                <el-button plain class="bind1-btn" @click="bindPhoneNumber">立即绑定</el-button>
               </div>
 
               <el-divider border-style="double" />
@@ -64,8 +67,8 @@
                 </div>
                 <div class="item-value">{{ userInfo.weChatStatus }}</div>
                 <div class="we-chat-actions">
-                  <el-button plain class="change-btn">更换</el-button>
-                  <el-button plain class="unbind-btn">解绑</el-button>
+                  <el-button plain class="change-btn" @click="changeWeChat">更换</el-button>
+                  <el-button plain class="unbind-btn" @click="unbindWeChat">解绑</el-button>
                 </div>
               </div>
 
@@ -76,7 +79,7 @@
                   <el-text class="mx-1">邮箱</el-text>
                 </div>
                 <div class="item-value">{{ userInfo.email }}</div>
-                <el-button plain class="bind2-btn">立即绑定</el-button>
+                <el-button plain class="bind2-btn" @click="bindEmail">立即绑定</el-button>
               </div>
 
               <el-divider border-style="double" />
@@ -86,7 +89,7 @@
                   <el-text class="mx-1">实名认证</el-text>
                 </div>
                 <div class="item-value">{{ userInfo.authentication }}</div>
-                <el-button plain class="authen-btn">认证</el-button>
+                <el-button plain class="authen-btn" @click="authenticate">认证</el-button>
               </div>
 
               <el-divider border-style="double" />
@@ -95,8 +98,8 @@
                 <div class="item-title">
                   <el-text class="mx-1">密码</el-text>
                 </div>
-                <div class="item-value">{{ userInfo.passward }}</div>
-                <el-button plain class="passward-btn">设置密码</el-button>
+                <div class="item-value">{{ userInfo.password }}</div>
+                <el-button plain class="passward-btn" @click="setPassword">设置密码</el-button>
               </div>
 
               <el-divider border-style="double" />
@@ -106,7 +109,7 @@
                   <el-text class="mx-1">账号注销</el-text>
                 </div>
                 <div class="item-value">{{ userInfo.cancellation }}</div>
-                <el-button type="danger" plain class="cancel-btn">注销</el-button>
+                <el-button type="danger" plain class="cancel-btn" @click="confirmCancellation">注销</el-button>
               </div>
             </div>
           </div>
@@ -117,24 +120,190 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
       userInfo: {
-        name: "微信用户OquH2t8F",
-        id: "29988916",
+        name: "两年半的练习生",
+        id: "114514",
         phoneNumber: "666666",
         weChatStatus: "已绑定",
         email: "1234679",
         authentication: "未认证",
-        passward: "464464",
+        password: "464464",
         cancellation: "注销后不可恢复，请谨慎操作"
-      }
+      },
+      editingName: false,
+      newName: ''
     };
   },
   methods: {
-    closeSidebar() {
-      // Implement logic to close the sidebar or navigate away.
+    showEditAvatarModal() {
+      // 弹出修改头像的模态框
+      console.log("显示修改头像模态框");
+    },
+    toggleEditName() {
+      this.editingName = !this.editingName;
+    },
+    saveName() {
+      this.userInfo.name = this.newName;
+      this.editingName = false;
+      this.newName = '';
+      // 可以在这里添加保存到后端的逻辑
+      this.saveUserInfo();
+    },
+    copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        this.$message.success("已复制到剪贴板");
+      }).catch(err => {
+        this.$message.error("复制失败，请重试");
+      });
+    },
+    bindPhoneNumber() {
+      this.$prompt('请输入手机号', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /^1[3-9]\d{9}$/,
+        inputErrorMessage: '手机号格式不正确'
+      }).then(({ value }) => {
+        axios.post('/api/bind-phone-number', { phoneNumber: value })
+          .then(response => {
+            this.userInfo.phoneNumber = value;
+            this.$message.success('手机号绑定成功');
+          })
+          .catch(error => {
+            this.$message.error('手机号绑定失败，请重试');
+          });
+      }).catch(() => {
+        this.$message.info('已取消绑定');
+      });
+    },
+    changeWeChat() {
+      this.$prompt('请输入新的微信号', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /^[a-zA-Z][a-zA-Z0-9_]{5,19}$/,
+        inputErrorMessage: '微信号格式不正确'
+      }).then(({ value }) => {
+        axios.post('/api/change-we-chat', { weChat: value })
+          .then(response => {
+            this.userInfo.weChatStatus = "已绑定";
+            this.$message.success('微信更换成功');
+          })
+          .catch(error => {
+            this.$message.error('微信更换失败，请重试');
+          });
+      }).catch(() => {
+        this.$message.info('已取消更换');
+      });
+    },
+    unbindWeChat() {
+      this.$confirm('确定要解绑微信吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axios.post('/api/unbind-we-chat')
+          .then(response => {
+            this.userInfo.weChatStatus = "未绑定";
+            this.$message.success('微信解绑成功');
+          })
+          .catch(error => {
+            this.$message.error('微信解绑失败，请重试');
+          });
+      }).catch(() => {
+        this.$message.info('已取消解绑');
+      });
+    },
+    bindEmail() {
+      this.$prompt('请输入邮箱地址', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        inputErrorMessage: '邮箱格式不正确'
+      }).then(({ value }) => {
+        axios.post('/api/bind-email', { email: value })
+          .then(response => {
+            this.userInfo.email = value;
+            this.$message.success('邮箱绑定成功');
+          })
+          .catch(error => {
+            this.$message.error('邮箱绑定失败，请重试');
+          });
+      }).catch(() => {
+        this.$message.info('已取消绑定');
+      });
+    },
+    authenticate() {
+      this.$prompt('请输入身份证号', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /^[1-9]\d{5}(18|19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])\d{3}[0-9Xx]$/,
+        inputErrorMessage: '身份证号格式不正确'
+      }).then(({ value }) => {
+        axios.post('/api/authenticate', { idCard: value })
+          .then(response => {
+            this.userInfo.authentication = "已认证";
+            this.$message.success('实名认证成功');
+          })
+          .catch(error => {
+            this.$message.error('实名认证失败，请重试');
+          });
+      }).catch(() => {
+        this.$message.info('已取消认证');
+      });
+    },
+    setPassword() {
+      this.$prompt('请输入新密码', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+        inputErrorMessage: '密码格式不正确（至少8位，包含大小写字母和数字）'
+      }).then(({ value }) => {
+        axios.post('/api/set-password', { password: value })
+          .then(response => {
+            this.userInfo.password = value;
+            this.$message.success('密码设置成功');
+          })
+          .catch(error => {
+            this.$message.error('密码设置失败，请重试');
+          });
+      }).catch(() => {
+        this.$message.info('已取消设置');
+      });
+    },
+    confirmCancellation() {
+      this.$confirm('确定要注销账号吗？此操作不可逆。', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axios.post('/api/cancel-account')
+          .then(response => {
+            this.userInfo.cancellation = "已注销";
+            this.$message.success('账号已注销');
+          })
+          .catch(error => {
+            this.$message.error('账号注销失败，请重试');
+          });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消注销'
+        });
+      });
+    },
+    saveUserInfo() {
+      // 保存用户信息到后端
+      axios.post('/api/save-user-info', this.userInfo)
+        .then(response => {
+          this.$message.success('用户信息保存成功');
+        })
+        .catch(error => {
+          this.$message.error('用户信息保存失败，请重试');
+        });
     }
   }
 };
@@ -185,31 +354,27 @@ export default {
 }
 
 .item-value {
-  display: inline-block; /* 让值和按钮在同一行 */
-  margin-right: 10px; /* 增加间距 */
+  display: inline-block;
+  margin-right: 10px;
 }
 
-.edit-btn{
+.edit-btn {
   float: right;
 }
+
 .copy-btn {
   float: right;
 }
 
-
 .bind1-btn {
-  float : right;
+  float: right;
 }
 
 .we-chat-actions {
   display: flex;
-  justify-content: flex-end; /* 将按钮移到最右边 */
-  gap: 3px; /* 按钮之间的间距 */
+  justify-content: flex-end;
+  gap: 3px;
 }
-
-/* .bind1-btn, .change-btn {
-  
-} */
 
 .bind2-btn {
   float: right;
@@ -225,11 +390,14 @@ export default {
 
 .cancel-btn {
   float: right;
-} 
+}
 
 .unbind-btn {
   margin-left: 10px;
 }
 
-
+.edit-input {
+  margin-right: 10px;
+  width: 200px;
+}
 </style>
