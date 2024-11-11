@@ -4,7 +4,8 @@
 
 **测试准备工作：**
 ![image](https://github.com/user-attachments/assets/81fcae32-dfaf-4dc6-a74b-994ae40e0d44)
-![image](https://github.com/user-attachments/assets/9d6f8ad4-0a5c-4829-94e4-0241cb993f22)
+![image](https://github.com/user-attachments/assets/7bd5b067-eb45-44c8-b245-c002ee85a81a)
+
 <br><br>
 **测试流程：** <br>
 **1.登录：**  
@@ -20,6 +21,14 @@
 接口：/api/auth/totp/enable  -  请求参数：（email，验证码）<br>
 注意：60秒超时，验证码失效，需要重新发。
 ![image](https://github.com/user-attachments/assets/bbd56aac-8132-4ddb-bad4-db1c173bd385)
+<br><br><br><br>
+
+**邮件发送技术分享：**
+![image](https://github.com/user-attachments/assets/05ac35be-3a9f-4e1c-bf95-41a4026656b7)
+![image](https://github.com/user-attachments/assets/e66dbdf1-977b-4fa7-9cd2-7a472b989482)
+![image](https://github.com/user-attachments/assets/718d820c-407c-4784-8caf-dda4d58efbaa)
+![image](https://github.com/user-attachments/assets/eea298b2-9e72-4466-a17e-e3bade4dba58)
+
 
 
 
