@@ -1,45 +1,46 @@
-# /SD
+# /Back-GenerateImage(SD)
 
 > *Contributed By **YaXian Wang***
+>
+> 文生图进程————接受画图描述后，生成图片返回。
 
 ### 0.requirements.txt
 
-执行```pip install -r requirements.txt```来安装此python代码执行所需依赖。
+代码依赖（外部库）。
+
+执行```pip install -r requirements.txt```来安装。
 
 ### 1.test1.py
 
-这里是服务器代码。*From flask, diffusers, datetime*
+这里是服务器代码。**需在pipe处加载你的模型。**
 
-若想运行，请在pipe处加载你的模型。
+通过diffusion库，加载.safetensors模型，根据参数pipe出.png图片。
 
-接受POST传JOSN参
-'/generate'
+通过FLASK库，接受POST请求。
+
+**POST** :&nbsp; /generate
 ```
 {
-  "prompt"
-  "negative_prompt"
-  "num_inference_steps"
-  "width"
-  "height"
-  "guidance_scale"
-  "seed"
+  "prompt":
+  "negative_prompt":
+  "num_inference_steps":
+  "width":
+  "height":
+  "guidance_scale":
+  "seed":
 }
 ```
 
 
 ### 2.test_post.py
 
-发送post请求来测试。
-
-此代码通过python的request库来发送post请求并储存返回的图片
+一个post测试。
 
 ![image](https://github.com/user-attachments/assets/673d3967-e855-40b9-a5f9-39c56266da1a)
 
 ---
 
 <br><br>
-
-![](C:\Users\86133\Desktop\24-25深大\岗位实践\Project\Myproject\imgs\test.png)
 
 
 
