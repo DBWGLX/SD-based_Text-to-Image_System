@@ -26,6 +26,7 @@
 **邮件发送技术分享：**
 ![image](https://github.com/user-attachments/assets/05ac35be-3a9f-4e1c-bf95-41a4026656b7)
 ![image](https://github.com/user-attachments/assets/e66dbdf1-977b-4fa7-9cd2-7a472b989482)
+![image](https://github.com/user-attachments/assets/718d820c-407c-4784-8caf-dda4d58efbaa)
 ![image](https://github.com/user-attachments/assets/eea298b2-9e72-4466-a17e-e3bade4dba58)
 
 
