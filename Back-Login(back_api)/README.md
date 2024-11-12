@@ -5,7 +5,8 @@
 
 #### 功能
 发送登录请求到服务器。
-
+**接口**：
+- **POST /auth/login**：
 #### 参数
 - `data`：对象，包含用户登录凭证。
   - `username`：字符串，用户名。
@@ -42,7 +43,8 @@ export function loginApi(data) {
 
 #### 功能
 发送注册请求到服务器。
-
+**接口**：
+- **POST "/auth/register**：
 #### 参数
 - `data`：对象，包含用户注册信息。
   - `username`：字符串，用户名。
