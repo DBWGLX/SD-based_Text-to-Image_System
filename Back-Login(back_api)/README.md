@@ -85,6 +85,9 @@ export function registerApi(data) {
 
 #### 
 
+
+**具体细节**
+
 **功能描述**：
 `AuthController` 是一个处理用户认证的控制器，主要负责用户的登录操作。它通过接收前端传递的用户名和密码，验证用户身份，并生成一个JWT（JSON Web Token）返回给前端。
 
