@@ -3,19 +3,29 @@
 ![image](https://github.com/user-attachments/assets/9abdeefd-656e-49bd-a578-fcc29892b699)
 
 ###
-loginApi 函数
-功能：发送登录请求到服务器。
-参数：
-data：对象，包含用户登录凭证。
-username：字符串，用户名。
-password：字符串，密码。
-registerApi 函数
-功能：发送注册请求到服务器。
-参数：
-data：对象，包含用户注册信息。
-username：字符串，用户名。
-password：字符串，密码。
-email：字符串，邮箱。
+export function loginApi(data) {
+  return request({
+    url: "/auth/login",
+    method: "POST",
+    params: data
+  });
+}
+
+![屏幕截图 2024-11-12 203301](https://github.com/user-attachments/assets/2f6e7c70-1975-4aea-9676-fe6c19308fd4)
+
+
+
+export function registerApi(data) {
+  return request({
+    url: "/auth/register",
+    method: "POST",
+    data
+  });
+}
+
+
+![image](https://github.com/user-attachments/assets/3e2394fd-b3df-46bf-8364-06f46bd9e193)
+
 ###
 
 ### 程序处理逻辑及接口说明
