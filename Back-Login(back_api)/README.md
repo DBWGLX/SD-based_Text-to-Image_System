@@ -1,7 +1,7 @@
 ### 程序处理逻辑及接口说明
 
 ###
-export function loginApi(data) {
+1.export function loginApi(data) {
   return request({
     url: "/auth/login",
     method: "POST",
@@ -11,7 +11,9 @@ export function loginApi(data) {
 ![屏幕截图 2024-11-12 203301](https://github.com/user-attachments/assets/2f6e7c70-1975-4aea-9676-fe6c19308fd4)
 
 
-export function registerApi(data) {
+
+
+2.export function registerApi(data) {
   return request({
     url: "/auth/register",
     method: "POST",
@@ -22,6 +24,8 @@ export function registerApi(data) {
 ![image](https://github.com/user-attachments/assets/3e2394fd-b3df-46bf-8364-06f46bd9e193)
 
 ###
+
+
 
 
 
