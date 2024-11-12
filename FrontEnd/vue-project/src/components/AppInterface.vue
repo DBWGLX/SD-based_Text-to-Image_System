@@ -5,7 +5,7 @@
     </div>
     <div class="body">
       <div class="container">
-        <div class="upper">
+        <div class="left">
           <div class="prompt">
             <label for="prompt" class="input-label">Prompt:</label>
             <!-- image的prompt -->
@@ -123,11 +123,11 @@
             />
           </div>
           <div class="submit-button">
-            <button @click="submitData" class="generate-button">
-              {{ isGenerating ? 'Generating...' : 'Generate' }}
-              <!-- 动态按钮 -->    
-            </button>
-          </div>
+              <button @click="submitData" class="generate-button">
+                {{ isGenerating ? 'Generating...' : 'Generate' }}
+                <!-- 动态按钮 -->    
+              </button>
+            </div>
         </div>
 
         <div class="below">
@@ -202,6 +202,10 @@ export default {
 </script>
 
 <style scoped>
+.body {
+  padding: 20px;
+}
+
 .app-interface {
   padding: 0px;
   display: flex;
@@ -230,8 +234,9 @@ export default {
   flex: 1;
 }
 
-.upper {
+.left {
   display: flex;
+  flex-direction: column;
   flex: 1; /* 让上部分占满可用空间 */
 }
 
@@ -257,7 +262,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center; /* 让按钮居中 */
-  padding: 0 20px; /* 给按钮两侧增加一些内边距 */
+  padding: 0; /* 给按钮两侧增加一些内边距 */
 }
 
 .generate-button {

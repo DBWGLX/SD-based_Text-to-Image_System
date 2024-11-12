@@ -3,6 +3,67 @@
 ![image](https://github.com/user-attachments/assets/9abdeefd-656e-49bd-a578-fcc29892b699)
 
 
+### 程序处理逻辑及接口说明
+
+#### 
+
+**功能描述**：
+`AuthController` 是一个处理用户认证的控制器，主要负责用户的登录操作。它通过接收前端传递的用户名和密码，验证用户身份，并生成一个JWT（JSON Web Token）返回给前端。
+
+**接口**：
+- **POST /auth/login**：
+  - **请求参数**：
+    - `username`（必需）：用户输入的用户名。
+    - `password`（必需）：用户输入的密码。
+  - **响应**：
+    - 成功登录时，返回一个包含JWT的JSON对象，格式如下：
+      ```json
+      {
+        "code": 200,
+        "message": "登录成功",
+        "data": {
+          "token": "generated_token"
+        }
+      }
+      ```
+    - 登录失败时，返回相应的错误信息，例如：
+      ```json
+      {
+        "code": 400,
+        "message": "用户名或密码错误"
+      }
+      ```
+
+
+#### 2.
+
+**功能描述**：
+`TokenInterceptor` 是一个拦截器，用于在每个请求到达控制器之前验证请求中的JWT。如果验证通过，将用户信息设置到请求属性中；如果验证失败，返回相应的错误信息。
+
+**错误处理**：
+- 如果JWT验证失败，调用 `retResponse` 方法返回错误信息，格式如下：
+  ```json
+  {
+    "code": 401,
+    "message": "Token无效或已过期"
+  }
+  ```
+
+### 如何与前端进行交互
+
+1. **登录流程**：
+   - 前端发送一个包含用户名和密码的POST请求到 `/auth/login`。
+   - 后端验证用户名和密码，生成JWT并返回给前端。
+   - 前端收到JWT后，将其存储在本地。
+
+2. **后续请求**：
+   - 前端在每次发送请求时，将JWT作为 `Authorization` 头字段的一部分发送。
+   - 后端的 `TokenInterceptor` 拦截器验证JWT的有效性，如果验证通过，继续处理请求；如果验证失败，返回相应的错误信息。
+
+
+
+
+
 一.数据库设计
 back.sql文件概述
 
@@ -48,6 +109,9 @@ back.sql文件概述
 3. **验证结果**:
    - 完成导入后，可以通过查询`admins`表来验证数据是否正确无误地导入到了新的数据库中。
 ![image](https://github.com/user-attachments/assets/d0ce4093-682d-4fd6-ab4b-eb023798cb18)
+
+
+
 
 
 二.
