@@ -2,6 +2,21 @@
 
 ![image](https://github.com/user-attachments/assets/9abdeefd-656e-49bd-a578-fcc29892b699)
 
+###
+loginApi 函数
+功能：发送登录请求到服务器。
+参数：
+data：对象，包含用户登录凭证。
+username：字符串，用户名。
+password：字符串，密码。
+registerApi 函数
+功能：发送注册请求到服务器。
+参数：
+data：对象，包含用户注册信息。
+username：字符串，用户名。
+password：字符串，密码。
+email：字符串，邮箱。
+###
 
 ### 程序处理逻辑及接口说明
 
