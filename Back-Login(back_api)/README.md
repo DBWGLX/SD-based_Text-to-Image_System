@@ -3,6 +3,8 @@
 ![image](https://github.com/user-attachments/assets/9abdeefd-656e-49bd-a578-fcc29892b699)
 
 ###
+
+```json
 export function loginApi(data) {
   return request({
     url: "/auth/login",
@@ -10,11 +12,11 @@ export function loginApi(data) {
     params: data
   });
 }
-
+```
 ![屏幕截图 2024-11-12 203301](https://github.com/user-attachments/assets/2f6e7c70-1975-4aea-9676-fe6c19308fd4)
 
 
-
+```json
 export function registerApi(data) {
   return request({
     url: "/auth/register",
@@ -22,7 +24,7 @@ export function registerApi(data) {
     data
   });
 }
-
+```
 
 ![image](https://github.com/user-attachments/assets/3e2394fd-b3df-46bf-8364-06f46bd9e193)
 
