@@ -1,4 +1,4 @@
-package com.llxx.service.impl;
+package com.back.service.impl;
 
 import com.llxx.mapper.imagesMapper;
 import com.llxx.pojo.images;
@@ -23,6 +23,16 @@ public class imagesServiceImpl implements imagesService {
         image.setUserId(userId);
         image.setCreateAt(LocalDateTime.now());
         imagemapper.insert(image);
+    }
+
+    @Override
+    public void save(images image) {
+
+    }
+
+    @Override
+    public Integer selectByUserId(Integer userId) {
+        return 0;
     }
 
     @Override

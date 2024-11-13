@@ -1,4 +1,4 @@
-package com.llxx.mapper;
+package com.back.dao;
 
 import com.llxx.pojo.history;
 import org.apache.ibatis.annotations.Insert;
