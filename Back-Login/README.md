@@ -12,7 +12,7 @@
   - `username`：字符串，用户名。
   - `password`：字符串，密码。
 
-#### 示例
+#### 例
 ```javascript
 const loginData = {
   username: "user123",
