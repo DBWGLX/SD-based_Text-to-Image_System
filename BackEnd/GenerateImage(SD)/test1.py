@@ -1,3 +1,4 @@
+# 模块导入
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from diffusers import StableDiffusionPipeline
@@ -7,7 +8,7 @@ import torch
 import os
 import random
 
-
+# 创建 Flask 应用
 app = Flask(__name__)
 CORS(app)  # 允许所有跨域请求
 
@@ -22,14 +23,17 @@ pipe = StableDiffusionPipeline.from_single_file(
 device = "cuda" if torch.cuda.is_available() else "cpu"
 pipe = pipe.to(device)
 
+# 定义路由
 @app.route('/generate', methods=['POST'])
 def generate_image():
     # 获取请求中的数据
     data = request.json
 
+    # 提取参数
+    user_id = data.get("user_id", "default_user")
     # 描述
-    prompt = data.get("prompt", "a beautiful cool girl")
-    negative_prompt = data.get("negative_prompt", "a beautiful cool girl")
+    prompt = data.get("prompt", "masterpiece, best quality,")
+    negative_prompt = data.get("negative_prompt", "lowres, bad anatomy, bad hands, text, error, mssing fingers,extra digits, fewer digits, cropped, worst quality,low quality,normal quality,jpeg artifacts, signature, watermark,username, blurry")
     num_inference_steps = data.get("num_inference_steps", 30)
 
     # 尺寸
@@ -80,11 +84,35 @@ def generate_image():
     count = len(os.listdir("image")) + 1  # 计算当前目录下已有的图像数量
     image_path = f"image/{timestamp}_{count}.png"
 
-    # 保存图像并返回路径
+    # 保存图像
     image.save(image_path)
     
+    # 向历史记录进程发送生成数据
+    BACKEND_SERVER_URL = "http://127.0.0.1:5001/receive_image_details"
+    try:
+        payload = {
+            "user_id": user_id,
+            "image_name": image_name,
+            "prompt": prompt,
+            "negative_prompt": negative_prompt,
+            "num_inference_steps": num_inference_steps,
+            "guidance_scale": guidance_scale,
+            "width": width,
+            "height": height,
+            "seed": seed
+        }
+        response = requests.post(BACKEND_SERVER_URL, json=payload)
+        if response.status_code == 200:
+            print("图片生成详情已成功发送到后端")
+        else:
+            print(f"后端返回错误: {response.status_code}, {response.text}")
+    except Exception as e:
+        print(f"向后端发送数据时发生错误: {e}")
+
+    # 返回路径
     return send_file(image_path, mimetype='image/png')
 
+# 启动 Flask 服务
 if __name__ == '__main__':
     # 创建保存图像的目录（如果不存在）
     if not os.path.exists("image"):

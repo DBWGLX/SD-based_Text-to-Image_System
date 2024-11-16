@@ -13,7 +13,7 @@
               id="prompt"
               type="text"
               v-model="prompt"
-              placeholder="Input your prompt"
+              placeholder="Input your prompt, like: masterpiece, best quality,"
               class="text-input"
             />
             <!-- image的negative_prompt -->
@@ -22,7 +22,7 @@
               id="negative_prompt"
               type="text"
               v-model="negative_prompt"
-              placeholder="Input your negative prompt"
+              placeholder="Input your negative prompt, like: lowres, bad anatomy, bad hands, text, error, mssing fingers,extra digits, fewer digits, cropped, worst quality,low quality,normal quality,jpeg artifacts, signature, watermark,username, blurry"
               class="text-input"
             />
             <!-- image的num_inference_steps -->

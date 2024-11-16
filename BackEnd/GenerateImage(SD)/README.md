@@ -1,8 +1,10 @@
 # /Back-GenerateImage(SD)
 
 > *Contributed By **YaXian Wang***
->
-> 文生图进程————接受画图描述后，生成图片返回。
+
+接受post请求，用diffusion库加载模型，生成图片，返回。
+
+## 目录介绍：
 
 ### 0.requirements.txt
 
