@@ -33,13 +33,14 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh; /* 确保应用至少占满整个视口高度 */
+  margin: 0;
 }
 
 .router-links {
   display: flex;
   justify-content: space-between;
   position: fixed;
-  bottom: 20px; /* 距离底部 */
+  bottom: 0px;/* 距离底部 */
   width: 100%;
   padding: auto;
 }

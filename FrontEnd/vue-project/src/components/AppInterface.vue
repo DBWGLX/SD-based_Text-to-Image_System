@@ -130,11 +130,58 @@
             </div>
         </div>
 
-        <div class="below">
+        <div class="right">
+          <div class="input-group">
+              <label for="img-brightness" class="input-label">brightness:</label>
+              <input
+                type="number"
+                v-model="brightness"
+                min="-50"
+                max="50"
+                step="1"
+                class="control-input"
+                @input="editImage"
+              />    
+              </div>
+            <input
+              id="img-brightness"
+              type="range"
+              v-model="brightness"
+              class="text-input no-progress"
+              min="-50"
+              max="50"
+              step="1"
+              @input="editImage"
+            />
+              
+          <div class="input-group">
+            <label for="img-contrast" class="input-label">contrast:</label>
+            <input
+              type="number"
+              v-model="contrast"
+              min="-50"
+              max="50"
+              step="1"
+              class="control-input"
+              @input="editImage"
+            />    
+          </div>
+            <input
+              id="img-contrast"
+              type="range"
+              v-model="contrast"
+              class="text-input no-progress"
+              min="-50"
+              max="50"
+              step="1"
+              @input="editImage"
+            />
+
           <div class="result-and-action">
-            <div class="result">
-              <img :src="imageUrl" alt="生成的图像" />
+            <div class="image-container">
+                <img ref="image" :src="imageUrl" alt="生成的图像" />
             </div>
+            <button @click="downloadImage">Download</button>
           </div>
         </div>
       </div>
@@ -145,6 +192,14 @@
 <script>
 import rollingDiceIcon from '@/assets/rollingDiceIcon.svg'; // 使用 import 引入 SVG 文件
 export default {
+  mounted() {
+    // 在 mounted 钩子中检查 $refs.image 是否已经渲染
+    if (this.$refs.image) {
+      console.log('Image has been rendered!');
+    } else {
+      console.log('Image is not rendered yet!');
+    }
+  },
   data() {
     return {
       prompt: '',
@@ -157,6 +212,8 @@ export default {
       rollingDiceIconPath: rollingDiceIcon,
       imageUrl: 'https://webcnstatic.yostar.net/ba_cn_web/prod/upload/wallpaper/dMIq1HzJ.jpeg', // 初始图片 URL
       isGenerating: false, // 用于控制按钮显示
+      brightness: 0,//图片亮度
+      contrast: 0,//图片对比度
     };
   },
   methods: {
@@ -196,7 +253,74 @@ export default {
 
     generateRandomSeed(){
       this.seed = Math.floor(Math.random()*999999) + 1;
+    },
+
+    downloadImage() {
+      const targetUrl = this.imageUrl;
+      fetch(targetUrl)
+        .then((response) =>{
+          if(!response.ok){
+            throw new Error('图片下载失败');
+          }
+          return response.blob();
+        })
+        .then((blob) => {
+          const url = URL.createObjectURL(blob); // 创建 Blob 对象 URL
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'downloaded-image.jpg'; // 下载文件的名称
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url); // 释放 URL 对象
+        })
+        .catch(console.error);
+    },
+
+    editImage() {
+      //在前端更改图像的亮度和对比度，但图片的实际数据并没有更改，这里我们仅在下载的时候才进行更改
+      console.log("in")
+      const imgElement = this.$refs.image;
+      if(imgElement) {
+        console.log(`brightness: ${this.brightness}`)
+        console.log(`contrast: ${this.contrast}`)
+        // imgElement.style.filter = `brightness(${100 + parseInt(this.brightness)}%)`;
+        // imgElement.style.filter = `contrast(${100 + parseInt(this.contrast)}%)`;
+        imgElement.style.filter = `brightness(${100 + parseInt(this.brightness)}%)
+          contrast(${100 + parseInt(this.contrast)}%)`;
+      }
+
+    },
+    
+    async applyEditImage() {
+       try {
+        const response = await fetch("http://localhost:8080/api/edit/image", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            imagePath: this.imageUrl, // 服务器上的图片路径
+            edits: {
+              brightness: this.brightness,
+              contrast: this.contrast,
+            },
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json(); // 假设返回的是一个包含图片路径的 JSON
+        this.imageUrl = `http://localhost:8080/${data.image_url}`;
+      } catch (error) {
+        console.error("编辑图片时出错:", error);
+        alert("编辑图片失败，请检查后端服务是否正常。");
+      }
     }
+
+
   },
 };
 </script>
@@ -232,6 +356,7 @@ export default {
 .container {
   display: flex;
   flex: 1;
+  gap: 20px;
 }
 
 .left {
@@ -271,7 +396,7 @@ export default {
   font-size: 24px; /* 增加字体大小 */
 }
 
-.below {
+.right {
   display: flex;
   flex-direction: column; /* 让下半部分竖向排列 */
   flex: 1; /* 让下半部分占满剩余空间 */
@@ -296,11 +421,24 @@ export default {
   height: 500px;
 }
 
-.result img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
+.image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 800px; /* 固定框宽度 */
+  height: 500px; /* 固定框高度 */
+  overflow: visible; 
+  border: 0px solid #ccc; /* 边框样式 */
+}
+
+.image-container img {
+  max-width: 800px;
+  max-height: 500px;;
   height: auto;
+  width: auto;
+  object-fit: contain; /* 图片自适应填充 */
+  border-radius: 20px;
 }
 
 /*这个class确保属性输入框的label和control-input在同一行*/
@@ -352,4 +490,8 @@ input[type=number]::-webkit-outer-spin-button {
   opacity: 1; /* 设置不透明 */
   display: block; /* 确保按钮显示 */
 }
+
+
+
+
 </style>
