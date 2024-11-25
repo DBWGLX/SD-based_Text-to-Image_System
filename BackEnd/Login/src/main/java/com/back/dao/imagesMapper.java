@@ -1,6 +1,6 @@
 package com.back.dao;
 
-import com.llxx.pojo.images;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

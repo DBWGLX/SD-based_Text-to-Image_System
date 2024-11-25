@@ -36,6 +36,43 @@ def generate_image():
     negative_prompt = data.get("negative_prompt", "lowres, bad anatomy, bad hands, text, error, mssing fingers,extra digits, fewer digits, cropped, worst quality,low quality,normal quality,jpeg artifacts, signature, watermark,username, blurry")
     num_inference_steps = data.get("num_inference_steps", 30)
 
+    # 翻译
+    # translator = Translator(from_lang="en", to_lang="zh-CN")
+    dataT = {
+        "prompt": prompt
+    }   
+    urlT = "http://localhost:5001"
+    try:
+        response = requests.post(urlT, json=dataT)
+        response.raise_for_status()  # 检查是否有 HTTP 错误
+        # 提取返回的 JSON 数据
+        response_json = response.json()
+        if "prompt" in response_json:
+            prompt = response_json["prompt"]  # 提取返回结果中的 "prompt" 字段
+            print("翻译后的 prompt:", prompt)
+        else:
+            print("返回的 JSON 中没有 'prompt' 字段:", response_json)
+    except requests.exceptions.RequestException as e:
+        print("请求失败:", e)
+
+    dataT = {
+        "prompt": negative_prompt
+    }   
+    urlT = "http://localhost:5001"
+    try:
+        response = requests.post(urlT, json=dataT)
+        response.raise_for_status()  # 检查是否有 HTTP 错误
+        # 提取返回的 JSON 数据
+        response_json = response.json()
+        if "prompt" in response_json:
+            negative_prompt = response_json["prompt"]  # 提取返回结果中的 "prompt" 字段
+            print("翻译后的 negative_prompt:", negative_prompt)
+        else:
+            print("返回的 JSON 中没有 'negative_prompt' 字段:", response_json)
+    except requests.exceptions.RequestException as e:
+        print("请求失败2:", e)
+
+
     # 尺寸
     width = data.get("width", 512)
     height = data.get("height", 512)

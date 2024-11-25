@@ -1,7 +1,7 @@
 import requests
 
 data = {
-    "prompt": "一个漂亮的女孩",
+    "prompt": "a漂亮的女孩",
     "num_inference_steps": 50,
     "width": 512,
     "height": 512
