@@ -21,7 +21,8 @@
           <div class="profile-section">
             <div class="avatar-container">
               <!-- 头像 -->
-              <img src="https://img.zcool.cn/community/04b4wf2hltswlkpp4qebcs3937.png" style="width: 150px; height: 150px;">
+              <img src="https://img.zcool.cn/community/04b4wf2hltswlkpp4qebcs3937.png"
+                style="width: 150px; height: 150px;">
               <el-button plain class="edit-avatar-btn" @click="showEditAvatarModal">修改头像</el-button>
             </div>
 
@@ -32,7 +33,7 @@
                 <div class="item-title">
                   <el-text class="mx-1">姓名</el-text>
                 </div>
-                <div class="item-value">{{ editingName ? '' : userInfo.name }}</div>
+                <div class="item-value">{{ editingName ? '' : userInfo.username }}</div>
                 <el-button plain class="edit-btn" @click="toggleEditName">编辑</el-button>
                 <el-input v-if="editingName" v-model="newName" placeholder="请输入新姓名" class="edit-input"
                   @keyup.enter="saveName"></el-input>
@@ -63,33 +64,10 @@
 
               <div class="profile-item">
                 <div class="item-title">
-                  <el-text class="mx-1">微信</el-text>
-                </div>
-                <div class="item-value">{{ userInfo.weChatStatus }}</div>
-                <div class="we-chat-actions">
-                  <el-button plain class="change-btn" @click="changeWeChat">更换</el-button>
-                  <el-button plain class="unbind-btn" @click="unbindWeChat">解绑</el-button>
-                </div>
-              </div>
-
-              <el-divider border-style="double" />
-
-              <div class="profile-item">
-                <div class="item-title">
                   <el-text class="mx-1">邮箱</el-text>
                 </div>
                 <div class="item-value">{{ userInfo.email }}</div>
                 <el-button plain class="bind2-btn" @click="bindEmail">立即绑定</el-button>
-              </div>
-
-              <el-divider border-style="double" />
-
-              <div class="profile-item">
-                <div class="item-title">
-                  <el-text class="mx-1">实名认证</el-text>
-                </div>
-                <div class="item-value">{{ userInfo.authentication }}</div>
-                <el-button plain class="authen-btn" @click="authenticate">认证</el-button>
               </div>
 
               <el-divider border-style="double" />
@@ -106,11 +84,22 @@
 
               <div class="profile-item">
                 <div class="item-title">
+                  <el-text class="mx-1">查看历史记录</el-text>
+                </div>
+                <div class="item-value"></div>
+                <el-button plain class="view-history-btn" @click="viewUserImages">查看</el-button>
+              </div>
+
+              <el-divider border-style="double" />
+
+              <div class="profile-item">
+                <div class="item-title">
                   <el-text class="mx-1">账号注销</el-text>
                 </div>
                 <div class="item-value">{{ userInfo.cancellation }}</div>
                 <el-button type="danger" plain class="cancel-btn" @click="confirmCancellation">注销</el-button>
               </div>
+
             </div>
           </div>
         </el-main>
@@ -121,27 +110,50 @@
 
 <script>
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default {
   data() {
     return {
       userInfo: {
-        name: "两年半的练习生",
-        id: "114514",
-        phoneNumber: "666666",
-        weChatStatus: "已绑定",
-        email: "1234679",
-        authentication: "未认证",
-        password: "464464",
+        username: "",
+        id: "",
+        phoneNumber: "",
+        email: "",
+        password: "",
         cancellation: "注销后不可恢复，请谨慎操作"
       },
       editingName: false,
       newName: ''
     };
   },
-  methods: {
+  created() {
+  this.getUserInfo();
+},
+methods: {
+  getUserInfo() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // 通过解码 token 获取用户信息
+      try {
+        const decoded = jwt_decode(token); // 使用 jwt-decode 解码 token
+        // 如果 token 解码成功，就将用户信息保存到 `userInfo`
+        this.userInfo = {
+          id: decoded.id,
+          username: decoded.username,
+          email: decoded.email,
+          password: decoded.password
+        };
+      } catch (error) {
+        console.error("无效的 token", error);
+        this.$message.error("无效的 token，请重新登录");
+        this.$router.push('/login'); // 跳转到登录页
+      }
+    } else {
+      // this.$router.push('/login'); // 如果没有 token，跳转到登录页
+    }
+  },
     showEditAvatarModal() {
-      // 弹出修改头像的模态框
       console.log("显示修改头像模态框");
     },
     toggleEditName() {
@@ -151,7 +163,6 @@ export default {
       this.userInfo.name = this.newName;
       this.editingName = false;
       this.newName = '';
-      // 可以在这里添加保存到后端的逻辑
       this.saveUserInfo();
     },
     copyToClipboard(text) {
@@ -180,43 +191,6 @@ export default {
         this.$message.info('已取消绑定');
       });
     },
-    changeWeChat() {
-      this.$prompt('请输入新的微信号', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPattern: /^[a-zA-Z][a-zA-Z0-9_]{5,19}$/,
-        inputErrorMessage: '微信号格式不正确'
-      }).then(({ value }) => {
-        axios.post('/api/change-we-chat', { weChat: value })
-          .then(response => {
-            this.userInfo.weChatStatus = "已绑定";
-            this.$message.success('微信更换成功');
-          })
-          .catch(error => {
-            this.$message.error('微信更换失败，请重试');
-          });
-      }).catch(() => {
-        this.$message.info('已取消更换');
-      });
-    },
-    unbindWeChat() {
-      this.$confirm('确定要解绑微信吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        axios.post('/api/unbind-we-chat')
-          .then(response => {
-            this.userInfo.weChatStatus = "未绑定";
-            this.$message.success('微信解绑成功');
-          })
-          .catch(error => {
-            this.$message.error('微信解绑失败，请重试');
-          });
-      }).catch(() => {
-        this.$message.info('已取消解绑');
-      });
-    },
     bindEmail() {
       this.$prompt('请输入邮箱地址', '提示', {
         confirmButtonText: '确定',
@@ -234,25 +208,6 @@ export default {
           });
       }).catch(() => {
         this.$message.info('已取消绑定');
-      });
-    },
-    authenticate() {
-      this.$prompt('请输入身份证号', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPattern: /^[1-9]\d{5}(18|19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])\d{3}[0-9Xx]$/,
-        inputErrorMessage: '身份证号格式不正确'
-      }).then(({ value }) => {
-        axios.post('/api/authenticate', { idCard: value })
-          .then(response => {
-            this.userInfo.authentication = "已认证";
-            this.$message.success('实名认证成功');
-          })
-          .catch(error => {
-            this.$message.error('实名认证失败，请重试');
-          });
-      }).catch(() => {
-        this.$message.info('已取消认证');
       });
     },
     setPassword() {
@@ -296,7 +251,6 @@ export default {
       });
     },
     saveUserInfo() {
-      // 保存用户信息到后端
       axios.post('/api/save-user-info', this.userInfo)
         .then(response => {
           this.$message.success('用户信息保存成功');
@@ -304,7 +258,32 @@ export default {
         .catch(error => {
           this.$message.error('用户信息保存失败，请重试');
         });
-    }
+    },
+    viewUserImages() {
+      axios.get('/api/history', {
+  headers: {
+    'Authorization': 'Bearer ' + localStorage.getItem('token')
+  }
+}).then(response => {
+  console.log(response.data); // 输出返回的数据
+  const images = response.data.data;
+  if (Array.isArray(images)) {
+    this.$router.push({
+      name: 'UserImages',
+      query: { images: encodeURIComponent(JSON.stringify(images)) }
+    });
+  } else {
+    this.$router.push({ name: 'UserImages' });
+    this.$message.error('历史记录数据格式不正确');
+  }
+}).catch(error => {
+  console.error(error); // 输出错误
+  this.$router.push({ name: 'UserImages' });
+  this.$message.error('获取历史记录失败，请重试');
+});
+
+}
+
   }
 };
 </script>
@@ -370,17 +349,7 @@ export default {
   float: right;
 }
 
-.we-chat-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 3px;
-}
-
 .bind2-btn {
-  float: right;
-}
-
-.authen-btn {
   float: right;
 }
 
@@ -392,12 +361,12 @@ export default {
   float: right;
 }
 
-.unbind-btn {
-  margin-left: 10px;
-}
-
 .edit-input {
   margin-right: 10px;
   width: 200px;
+}
+
+.view-history-btn {
+  float: right;
 }
 </style>
