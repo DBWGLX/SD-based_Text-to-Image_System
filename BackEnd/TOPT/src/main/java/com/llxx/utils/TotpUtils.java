@@ -1,10 +1,13 @@
 package com.llxx.utils;
 
+import org.springframework.stereotype.Component;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
 import java.util.Base64;
 
+@Component
 public class TotpUtils {
 
     // 使用 HMAC-SHA1 算法生成 TOTP

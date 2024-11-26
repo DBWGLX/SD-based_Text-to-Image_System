@@ -36,7 +36,7 @@ public class HistoryController {
     public Result getHistory(@RequestParam Integer page,@RequestParam Integer size) {
         return historyService.getByAdmint(page,size);
     }
-    //用户批量删除历史记录,先获取userid
+    //用户批量删除历史记录
     @DeleteMapping("/{userId}/{historyIds}")
     public Result deleteHistoryByIds(@PathVariable Integer userId,@PathVariable List<Integer> historyIds) {
         return historyService.deleteHistoryByIds(userId,historyIds);

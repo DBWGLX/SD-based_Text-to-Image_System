@@ -3,10 +3,12 @@ package com.llxx.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Map;
 
+@Component
 public class JwtUtils {
 
     private static String signKey = "text-to-image";
