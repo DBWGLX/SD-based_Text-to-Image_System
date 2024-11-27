@@ -99,7 +99,7 @@
                 min="0"
                 max="999999"
               />
-              <button class="input-button" @click="generateRandomSeed"><img :src="rollingDiceIconPath" alt="" class="rollingDiceIcon"/></button>
+              <button class="input-button" @click="generateRandomSeed" :disabled="isGener"><img :src="rollingDiceIconPath" alt="" class="rollingDiceIcon"/></button>
             </div>
 
             <!-- img的guidance_scale -->
@@ -123,7 +123,7 @@
             />
           </div>
           <div class="submit-button">
-              <button @click="submitData" class="generate-button">
+              <button @click="submitData" class="generate-button" :disabled="isGenerateDisable">
                 {{ isGenerating ? 'Generating...' : 'Generate' }}
                 <!-- 动态按钮 -->    
               </button>
@@ -217,12 +217,13 @@ export default {
       brightness: 0,//图片亮度
       contrast: 0,//图片对比度
       isApplyDisable: false,
+      isGenerateDisable: false,
     };
   },
   methods: {
     async submitData() {
       this.isGenerating = true; // 设置为正在生成
-
+      this.isGenerateDisable = true;
       try {
         const response = await fetch('http://172.30.207.108:5000/generate', {
           method: 'POST',
@@ -251,6 +252,7 @@ export default {
         alert('生成图像失败，请重试' + error.message);
       }finally {
         this.isGenerating = false; // 请求完成后恢复按钮文本
+        this.isGenerateDisable = false;
       }
     },
 
@@ -505,23 +507,27 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 20px 0; /* 给按钮组添加上下外边距 */
 }
 
-.button-group button {
+button {
   background-color: #4CAF50; /* 按钮的背景色 */
   color: white; /* 按钮文字颜色 */
-  padding: 10px 20px; /* 按钮内边距 */
-  font-size: 16px; /* 字体大小 */
   border: none; /* 移除默认边框 */
   border-radius: 5px; /* 添加圆角 */
   cursor: pointer; /* 鼠标悬停时显示手型 */
   transition: background-color 0.3s ease, transform 0.2s ease; /* 添加过渡效果 */
 }
 
-.button-group button:hover {
+
+.button-group button {
+  padding: 10px 20px; /* 按钮内边距 */
+  font-size: 16px; /* 字体大小 */
+}
+
+button:hover {
   background-color: #45a049; /* 悬停时的背景色 */
   transform: scale(1.05); /* 悬停时稍微放大按钮 */
 }
 
-.button-group button:disabled {
+button:disabled {
   background-color: #cccccc; /* 禁用时的背景色 */
   cursor: not-allowed; /* 禁用时的鼠标样式 */
 }
