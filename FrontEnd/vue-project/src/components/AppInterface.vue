@@ -176,12 +176,14 @@
               step="1"
               @input="editImage"
             />
-
+          <div class="button-group">
+            <button @click="applyEditImage" :disabled="isApplyDisable">Apply Edit</button>
+            <button @click="downloadImage">Download</button>
+          </div>
           <div class="result-and-action">
             <div class="image-container">
                 <img ref="image" :src="imageUrl" alt="生成的图像" />
             </div>
-            <button @click="downloadImage">Download</button>
           </div>
         </div>
       </div>
@@ -214,6 +216,7 @@ export default {
       isGenerating: false, // 用于控制按钮显示
       brightness: 0,//图片亮度
       contrast: 0,//图片对比度
+      isApplyDisable: false,
     };
   },
   methods: {
@@ -294,6 +297,7 @@ export default {
     
     async applyEditImage() {
        try {
+        this.isApplyDisable = true;
         const response = await fetch("http://localhost:8080/api/edit/image", {
           method: "POST",
           headers: {
@@ -317,6 +321,8 @@ export default {
       } catch (error) {
         console.error("编辑图片时出错:", error);
         alert("编辑图片失败，请检查后端服务是否正常。");
+      }finally{
+        this.isApplyDisable = false;
       }
     }
 
@@ -492,6 +498,33 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
+.button-group {
+  display: flex;
+  justify-content: center; /* 水平居中对齐按钮组 */
+  gap: 15px; /* 按钮之间的间距 */
+  margin: 20px 0; /* 给按钮组添加上下外边距 */
+}
+
+.button-group button {
+  background-color: #4CAF50; /* 按钮的背景色 */
+  color: white; /* 按钮文字颜色 */
+  padding: 10px 20px; /* 按钮内边距 */
+  font-size: 16px; /* 字体大小 */
+  border: none; /* 移除默认边框 */
+  border-radius: 5px; /* 添加圆角 */
+  cursor: pointer; /* 鼠标悬停时显示手型 */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* 添加过渡效果 */
+}
+
+.button-group button:hover {
+  background-color: #45a049; /* 悬停时的背景色 */
+  transform: scale(1.05); /* 悬停时稍微放大按钮 */
+}
+
+.button-group button:disabled {
+  background-color: #cccccc; /* 禁用时的背景色 */
+  cursor: not-allowed; /* 禁用时的鼠标样式 */
+}
 
 
 </style>
