@@ -55,8 +55,9 @@
                 type="number"
                 v-model="width"
                 class="control-input"
-                min="1"
+                min="8"
                 max="1920"
+                step="8"
               />
             </div>
             <input
@@ -66,7 +67,7 @@
               class="text-input"
               min="1"
               max="1920"
-              step="1"
+              step="8"
             />
             <!-- image的高度 -->
             <div class="input-group">
@@ -76,8 +77,9 @@
                   type="number"
                   v-model="height"
                   class="control-input"
-                  min="1"
+                  min="8"
                   max="1920"
+                  step="8"
                 />
             </div>
             <input
@@ -87,6 +89,7 @@
                   class="text-input"
                   min="1"
                   max="1920"
+                  step="8"
             />
             <!-- img 的seed -->
             <label for="seed" class="input-label">Seed (leave blank for random):</label>
@@ -327,9 +330,20 @@ export default {
         this.isApplyDisable = false;
       }
     }
-
-
   },
+  watch: {
+    width(newValue) {
+      if(newValue % 8 !== 0){
+        this.width = Math.round(newValue / 8) * 8;
+      }
+    },
+
+    height(newValue) {
+      if(newValue % 8 !== 0){
+        this.height = Math.round(newValue / 8) * 8;
+      }
+    }
+  }
 };
 </script>
 
