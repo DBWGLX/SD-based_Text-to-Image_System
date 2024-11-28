@@ -6,6 +6,7 @@
       <list>
         <option value="$PROJECT_DIR$/JDBC-history-images/pom.xml" />
         <option value="$PROJECT_DIR$/TOPT/pom.xml" />
+        <option value="$PROJECT_DIR$/back-register/pom.xml" />
       </list>
     </option>
   </component>
