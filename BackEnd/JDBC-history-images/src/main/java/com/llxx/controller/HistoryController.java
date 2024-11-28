@@ -11,6 +11,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/history")
 public class HistoryController {
 
