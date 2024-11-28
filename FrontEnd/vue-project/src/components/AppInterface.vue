@@ -216,6 +216,7 @@ export default {
       guidance_scale: 7.5, // 默认值
       rollingDiceIconPath: rollingDiceIcon,
       imageUrl: 'https://webcnstatic.yostar.net/ba_cn_web/prod/upload/wallpaper/dMIq1HzJ.jpeg', // 初始图片 URL
+      // imageUrl: '	https://lam-l.github.io/Landing-Pages/image.png',
       isGenerating: false, // 用于控制按钮显示
       brightness: 0,//图片亮度
       contrast: 0,//图片对比度
@@ -312,8 +313,8 @@ export default {
             imagePath: this.imageUrl, // 服务器上的图片路径
             edits: {
               brightness: this.brightness,
-              contrast: this.contrast,
-            },
+              contrast: this.contrast
+            }
           }),
         });
 
