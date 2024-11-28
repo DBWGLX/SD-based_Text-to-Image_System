@@ -4,6 +4,7 @@
 import UserInfo from "./UserInfo.vue";
 import Collaspe from "./Collaspe.vue";
 import Bredcum from "./Bredcum.vue";
+
 </script>
 
 <template>

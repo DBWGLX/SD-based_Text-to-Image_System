@@ -19,19 +19,11 @@ const routes = [
     children: [
       // 首页
       {
-        path: "/",
-        name: "Layout",
-        component: BackendManagement,
-        // 自动跳转
-        redirect: "/dashboard",
-        children: [
-          {
             path: "/dashboard",
             name: "Dashboard",
+            component: BackendManagement,
             // component: () => import("../views/index/Dashboard.vue"),
             meta: { title: "首页" },
-          },
-        ],
       },
       // 基础数据--->专业信息、小组信息
       {
