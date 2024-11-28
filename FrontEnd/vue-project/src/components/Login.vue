@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -26,16 +27,29 @@ export default {
     };
   },
   methods: {
-    login() {
-        // 假设验证逻辑
-        if (this.username === 'user' && this.password === 'pass') {
-        localStorage.setItem('isAuthenticated', 'true'); // 设置登录状态
-        this.$router.push('/app'); // 登录成功后重定向到应用界面
+    async login() {
+      try {
+        // 发送 POST 请求到后端
+        const response = await axios.post('http://localhost:8080/api/login/totp', {
+          username: this.username,
+          password: this.password,
+        });
+
+        // 假设后端返回的字段为 { success: true, token: '...' }
+        if (response.data.success) {
+          localStorage.setItem('isAuthenticated', 'true'); // 设置登录状态
+          localStorage.setItem('authToken', response.data.token); // 保存后端返回的 token
+          this.$router.push('/app'); // 登录成功后重定向到应用界面
         } else {
-        this.errorMessage = 'Invalid credentials';
+          this.errorMessage = response.data.message || 'Invalid credentials'; // 设置后端返回的错误信息
         }
+      } catch (error) {
+        // 捕获请求失败的错误
+        this.errorMessage = 'Failed to login. Please try again later.';
+        console.error(error); // 输出错误信息到控制台（可选）
+      }
     },
-    }
+  },
 
 };
 </script>
