@@ -3,6 +3,14 @@
 *Contributed By:*  Yilin Xu <br><br>
 
 <br><br>
+
+**数据库连接：**
+![image](https://github.com/user-attachments/assets/2ddbefb8-8351-4c70-927f-563f3304f996)
+![image](https://github.com/user-attachments/assets/7b408ead-32df-4bfd-9b9e-052f62a3b156)
+
+
+
+
 **传参数据库查询成功，发送验证码：**
 /api/auth/login/totp
 ![image](https://github.com/user-attachments/assets/d8b2ae07-3b7e-46e2-9569-5b6a55bc3635)
