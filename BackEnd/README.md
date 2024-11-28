@@ -28,6 +28,9 @@
 #### 建表语句：
 
 ```
+CREATE DATABASE SD
+USE SD
+
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `username` varchar(255) NOT NULL COMMENT '用户名',
@@ -36,9 +39,7 @@ CREATE TABLE `users` (
   `phone` varchar(20) DEFAULT NULL COMMENT '电话',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-```
 
-```
 CREATE TABLE `image_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '序号主键',
   `user_id` int(11) DEFAULT NULL COMMENT '用户ID（外键）',
