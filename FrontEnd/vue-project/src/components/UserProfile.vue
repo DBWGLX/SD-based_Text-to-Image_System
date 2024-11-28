@@ -112,6 +112,14 @@
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
+const apiClient = axios.create({
+  baseURL: 'http://localhost:8080/api', // 指定 API 的基础 URL 和端口号
+  headers: {
+    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+  },
+});
+
+
 export default {
   data() {
     return {
@@ -260,7 +268,8 @@ methods: {
         });
     },
     viewUserImages() {
-      axios.get('/api/history', {
+      console.log("114514");
+      apiClient.get('/history', {
   headers: {
     'Authorization': 'Bearer ' + localStorage.getItem('token')
   }
