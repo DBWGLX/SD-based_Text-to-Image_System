@@ -50,7 +50,7 @@
             <!-- image的宽度 -->
             <!-- 确保label和control-input在同一行 -->
             <div class="input-group">
-              <label for="width" class="input-label">Width:</label>
+              <label for="width" class="input-label">Width: （目前长和宽只支持8的倍数，否则报错）</label>
               <input
                 type="number"
                 v-model="width"

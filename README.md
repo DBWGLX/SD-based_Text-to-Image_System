@@ -11,7 +11,7 @@
 
 1. set the **pipe** and **port** based on FLASK in ``'/SD/test1.py'``
 2. set the **ip** of fetch as your backend server's ip in ``'/FrontEnd/vue-project/src/components/AppInterface.vue'``
-3. to run the FrontEnd , use ``httpserver ./dict -c-1 --cors``  server in public (./dict is made by ``npm run built``)
+3. to run the FrontEnd , use ``http-server ./dist -c-1 --cors``  server in public (./dict is made by ``npm run built``)
 
 ## Interface document
 

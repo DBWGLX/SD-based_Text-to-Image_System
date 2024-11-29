@@ -7,6 +7,8 @@ from datetime import datetime
 import torch
 import os
 import random
+import requests
+
 
 # 创建 Flask 应用
 app = Flask(__name__)
@@ -125,26 +127,26 @@ def generate_image():
     image.save(image_path)
     
     # 向历史记录进程发送生成数据
-    BACKEND_SERVER_URL = "http://127.0.0.1:5001/receive_image_details"
-    try:
-        payload = {
-            "user_id": user_id,
-            "image_name": image_name,
-            "prompt": prompt,
-            "negative_prompt": negative_prompt,
-            "num_inference_steps": num_inference_steps,
-            "guidance_scale": guidance_scale,
-            "width": width,
-            "height": height,
-            "seed": seed
-        }
-        response = requests.post(BACKEND_SERVER_URL, json=payload)
-        if response.status_code == 200:
-            print("图片生成详情已成功发送到后端")
-        else:
-            print(f"后端返回错误: {response.status_code}, {response.text}")
-    except Exception as e:
-        print(f"向后端发送数据时发生错误: {e}")
+    # BACKEND_SERVER_URL = "http://127.0.0.1:5001/receive_image_details"
+    # try:
+    #     payload = {
+    #         "user_id": user_id,
+    #         "image_name": image_name,
+    #         "prompt": prompt,
+    #         "negative_prompt": negative_prompt,
+    #         "num_inference_steps": num_inference_steps,
+    #         "guidance_scale": guidance_scale,
+    #         "width": width,
+    #         "height": height,
+    #         "seed": seed
+    #     }
+    #     response = requests.post(BACKEND_SERVER_URL, json=payload)
+    #     if response.status_code == 200:
+    #         print("图片生成详情已成功发送到后端")
+    #     else:
+    #         print(f"后端返回错误: {response.status_code}, {response.text}")
+    # except Exception as e:
+    #     print(f"向后端发送数据时发生错误: {e}")
 
     # 返回路径
     return send_file(image_path, mimetype='image/png')
