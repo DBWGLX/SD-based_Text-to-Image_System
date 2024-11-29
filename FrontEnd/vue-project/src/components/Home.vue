@@ -35,6 +35,20 @@
   </div>
 </template>
 
+<script setup>
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const signIn = () => {
+  router.push('/signup'); // 跳转到注册页面
+};
+
+const login = () => {
+  router.push('/login'); // 跳转到登录页面
+};
+</script>
+
 <style scoped>
 * {
   padding: 0;

@@ -55,8 +55,9 @@
                 type="number"
                 v-model="width"
                 class="control-input"
-                min="1"
+                min="8"
                 max="1920"
+                step="8"
               />
             </div>
             <input
@@ -66,7 +67,7 @@
               class="text-input"
               min="1"
               max="1920"
-              step="1"
+              step="8"
             />
             <!-- image的高度 -->
             <div class="input-group">
@@ -76,8 +77,9 @@
                   type="number"
                   v-model="height"
                   class="control-input"
-                  min="1"
+                  min="8"
                   max="1920"
+                  step="8"
                 />
             </div>
             <input
@@ -87,6 +89,7 @@
                   class="text-input"
                   min="1"
                   max="1920"
+                  step="8"
             />
             <!-- img 的seed -->
             <label for="seed" class="input-label">Seed (leave blank for random):</label>
@@ -99,7 +102,7 @@
                 min="0"
                 max="999999"
               />
-              <button class="input-button" @click="generateRandomSeed"><img :src="rollingDiceIconPath" alt="" class="rollingDiceIcon"/></button>
+              <button class="input-button" @click="generateRandomSeed" :disabled="isGener"><img :src="rollingDiceIconPath" alt="" class="rollingDiceIcon"/></button>
             </div>
 
             <!-- img的guidance_scale -->
@@ -123,7 +126,7 @@
             />
           </div>
           <div class="submit-button">
-              <button @click="submitData" class="generate-button">
+              <button @click="submitData" class="generate-button" :disabled="isGenerateDisable">
                 {{ isGenerating ? 'Generating...' : 'Generate' }}
                 <!-- 动态按钮 -->    
               </button>
@@ -176,12 +179,14 @@
               step="1"
               @input="editImage"
             />
-
+          <div class="button-group">
+            <button @click="applyEditImage" :disabled="isApplyDisable">Apply Edit</button>
+            <button @click="downloadImage">Download</button>
+          </div>
           <div class="result-and-action">
             <div class="image-container">
                 <img ref="image" :src="imageUrl" alt="生成的图像" />
             </div>
-            <button @click="downloadImage">Download</button>
           </div>
         </div>
       </div>
@@ -211,15 +216,18 @@ export default {
       guidance_scale: 7.5, // 默认值
       rollingDiceIconPath: rollingDiceIcon,
       imageUrl: 'https://webcnstatic.yostar.net/ba_cn_web/prod/upload/wallpaper/dMIq1HzJ.jpeg', // 初始图片 URL
+      // imageUrl: '	https://lam-l.github.io/Landing-Pages/image.png',
       isGenerating: false, // 用于控制按钮显示
       brightness: 0,//图片亮度
       contrast: 0,//图片对比度
+      isApplyDisable: false,
+      isGenerateDisable: false,
     };
   },
   methods: {
     async submitData() {
       this.isGenerating = true; // 设置为正在生成
-
+      this.isGenerateDisable = true;
       try {
         const response = await fetch('http://172.30.207.108:5000/generate', {
           method: 'POST',
@@ -248,6 +256,7 @@ export default {
         alert('生成图像失败，请重试' + error.message);
       }finally {
         this.isGenerating = false; // 请求完成后恢复按钮文本
+        this.isGenerateDisable = false;
       }
     },
 
@@ -294,6 +303,7 @@ export default {
     
     async applyEditImage() {
        try {
+        this.isApplyDisable = true;
         const response = await fetch("http://localhost:8080/api/edit/image", {
           method: "POST",
           headers: {
@@ -303,8 +313,8 @@ export default {
             imagePath: this.imageUrl, // 服务器上的图片路径
             edits: {
               brightness: this.brightness,
-              contrast: this.contrast,
-            },
+              contrast: this.contrast
+            }
           }),
         });
 
@@ -317,11 +327,24 @@ export default {
       } catch (error) {
         console.error("编辑图片时出错:", error);
         alert("编辑图片失败，请检查后端服务是否正常。");
+      }finally{
+        this.isApplyDisable = false;
       }
     }
-
-
   },
+  watch: {
+    width(newValue) {
+      if(newValue % 8 !== 0){
+        this.width = Math.round(newValue / 8) * 8;
+      }
+    },
+
+    height(newValue) {
+      if(newValue % 8 !== 0){
+        this.height = Math.round(newValue / 8) * 8;
+      }
+    }
+  }
 };
 </script>
 
@@ -492,6 +515,37 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
+.button-group {
+  display: flex;
+  justify-content: center; /* 水平居中对齐按钮组 */
+  gap: 15px; /* 按钮之间的间距 */
+  margin: 20px 0; /* 给按钮组添加上下外边距 */
+}
+
+button {
+  background-color: #4CAF50; /* 按钮的背景色 */
+  color: white; /* 按钮文字颜色 */
+  border: none; /* 移除默认边框 */
+  border-radius: 5px; /* 添加圆角 */
+  cursor: pointer; /* 鼠标悬停时显示手型 */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* 添加过渡效果 */
+}
+
+
+.button-group button {
+  padding: 10px 20px; /* 按钮内边距 */
+  font-size: 16px; /* 字体大小 */
+}
+
+button:hover {
+  background-color: #45a049; /* 悬停时的背景色 */
+  transform: scale(1.05); /* 悬停时稍微放大按钮 */
+}
+
+button:disabled {
+  background-color: #cccccc; /* 禁用时的背景色 */
+  cursor: not-allowed; /* 禁用时的鼠标样式 */
+}
 
 
 </style>

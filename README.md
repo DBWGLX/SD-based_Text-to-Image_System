@@ -5,7 +5,26 @@
 
 ## Project Structure
 
-![image](https://github.com/user-attachments/assets/2133bb27-dd1f-4046-a5eb-0d0ba321bab8)
+![image](https://github.com/user-attachments/assets/7c949bca-ce8c-40e5-b973-8bb69ecb7dec)
+
+
+## Push Code Specifications 推送代码规范 (tmp ,New in 11.25)
+
+![3ec5a727c3dce90abb930666922d13e](https://github.com/user-attachments/assets/0f71a70c-4462-4ffa-8aaf-72655780d7a1)
+
+如图，加入自己的工作环境到这个隐藏目录。
+
+**忽略任何路径下的 .vscode 和 .idea 文件夹（无论其位置），可以使用通配符：**
+
+```
+**/.vscode/
+**/.idea/
+```
+
+> .git/info/exclude 是 Git 仓库的一个本地忽略规则文件，用于定义 当前仓库 的忽略规则。
+
+> 与 .gitignore 的功能类似，但 .git/info/exclude 是仅对本地生效的，并不会被推送到远程仓库。
+
 
 ## Deployment Guidance
 

@@ -112,6 +112,14 @@
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
+const apiClient = axios.create({
+  baseURL: 'http://localhost:8080/api', // 指定 API 的基础 URL 和端口号
+  headers: {
+    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+  },
+});
+
+
 export default {
   data() {
     return {
@@ -260,12 +268,13 @@ methods: {
         });
     },
     viewUserImages() {
-      axios.get('/api/history', {
+      const url = '/history/admins?page=1&size=10';
+      apiClient.get(url,{
   headers: {
     'Authorization': 'Bearer ' + localStorage.getItem('token')
   }
 }).then(response => {
-  console.log(response.data); // 输出返回的数据
+  console.log(response.data);
   const images = response.data.data;
   if (Array.isArray(images)) {
     this.$router.push({

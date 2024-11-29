@@ -2,26 +2,26 @@
 
 *Contributed By:*  Yilin Xu <br><br>
 
-**测试准备工作：**
-![image](https://github.com/user-attachments/assets/81fcae32-dfaf-4dc6-a74b-994ae40e0d44)
-![image](https://github.com/user-attachments/assets/7bd5b067-eb45-44c8-b245-c002ee85a81a)
+<br><br>
 
+**数据库连接：**
+![image](https://github.com/user-attachments/assets/2ddbefb8-8351-4c70-927f-563f3304f996)
+![image](https://github.com/user-attachments/assets/7b408ead-32df-4bfd-9b9e-052f62a3b156)
+
+
+
+
+**传参数据库查询成功，发送验证码：**
+/api/auth/login/totp
+![image](https://github.com/user-attachments/assets/d8b2ae07-3b7e-46e2-9569-5b6a55bc3635)
+![image](https://github.com/user-attachments/assets/15fc4d50-dcdf-421b-a5a2-e7c0bfa429e9)
 <br><br>
-**测试流程：** <br>
-**1.登录：**  
-接口：/api/auth/login  -  请求参数：user
-![image](https://github.com/user-attachments/assets/ca4a9a18-dbbf-40ae-b9f7-654d910e149e)
-<br><br>
-**2.发送验证码到邮箱：**
-接口：/api/auth/totp/email  -  请求参数：token
-![image](https://github.com/user-attachments/assets/0ba978b5-a5ba-4c41-a448-d230acb5bac1)
-![image](https://github.com/user-attachments/assets/ea45d343-eea1-4950-bfb8-5ebb782d1687)
-<br><br>
-**3.二次验证：**
-接口：/api/auth/totp/enable  -  请求参数：（email，验证码）<br>
-注意：60秒超时，验证码失效，需要重新发。
-![image](https://github.com/user-attachments/assets/bbd56aac-8132-4ddb-bad4-db1c173bd385)
-<br><br><br><br>
+
+**验证码验证，有效期10分钟：**
+/api/auth/login
+![image](https://github.com/user-attachments/assets/a75e835b-7eaa-4947-b91b-1a0fdd6dce82)
+
+
 
 **邮件发送技术分享：**
 ![image](https://github.com/user-attachments/assets/05ac35be-3a9f-4e1c-bf95-41a4026656b7)
