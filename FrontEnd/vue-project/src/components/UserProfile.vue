@@ -268,13 +268,13 @@ methods: {
         });
     },
     viewUserImages() {
-      console.log("114514");
-      apiClient.get('/history', {
+      const url = '/history/admins?page=1&size=10';
+      apiClient.get(url,{
   headers: {
     'Authorization': 'Bearer ' + localStorage.getItem('token')
   }
 }).then(response => {
-  console.log(response.data); // 输出返回的数据
+  console.log(response.data);
   const images = response.data.data;
   if (Array.isArray(images)) {
     this.$router.push({
