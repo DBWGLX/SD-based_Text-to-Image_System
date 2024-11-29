@@ -71,8 +71,8 @@ public class LoginController {
             return Result.error("验证失败");
         }
         String email=loginUser.getEmail();
-        String otp=userOtpCache.get(email);
-        String cachedOtp = userOtpCache.get(email); // 从缓存中获取用户的 OTP
+        String otp=user.getOtp();
+        String cachedOtp = userOtpCache.get(email); // 获取缓存中的 OTP
         Long otpTimestamp = otpTimestampCache.get(email); // 获取 OTP 生成时间
 
         log.info("取出缓存成功");
