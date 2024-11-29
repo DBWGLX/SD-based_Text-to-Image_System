@@ -1,11 +1,14 @@
 package com.back.backregister.Service;
 
-import com.back.backregister.pojo.User;
+
+import com.back.backregister.dto.EmailDto;
+import com.back.backregister.dto.LoginDto;
+import com.back.backregister.dto.RegisterDto;
 
 public interface UserService {
-    public Integer register(User user);
+    public Integer register(RegisterDto registerDto);
 
-    void sendEmail(String email);
+    void sendEmail(EmailDto emailDto);
 
-    
+    String login(LoginDto loginDto);
 }

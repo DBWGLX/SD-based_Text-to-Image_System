@@ -1,7 +1,10 @@
 package com.back.backregister.Mapper;
 
 
-import com.back.backregister.pojo.User;
+
+import com.back.backregister.Do.UserDo;
+import com.back.backregister.dto.LoginDto;
+import com.back.backregister.dto.RegisterDto;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -14,11 +17,12 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper {
 
     // 根据username查询是否有用户
-    User getByUserNameOrEmail(String username);
+    UserDo getByUserNameOrEmail(String username);
 
-    void add(User user);
+    void add(RegisterDto registerDto);
 
-    Integer getIdByUserName(User user);
+    Integer getIdByUserName(RegisterDto registerDto);
 
 
+    UserDo checkLogin(LoginDto loginDto);
 }

@@ -1,9 +1,11 @@
 spring:
+  #数据库连接信息
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sd
+    url: jdbc:mysql://172.30.207.108:3306/SD
     username: root
     password: 123456
+  #文件上传配置
   servlet:
     multipart:
       max-file-size: 10MB
@@ -17,23 +19,24 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
-  main:
-    allow-bean-definition-overriding: true
-    allow-circular-references: true
 
-
+#myybatis配置，日志，驼峰命名
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
 
+# mybatis-plus的配置
+mybatis-plus:
+  configuration:
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
 
 
+#spring事务管理日志
 logging:
   level:
     org.springframework.jdbc.support.JdbcTransactionManager: debug
-
-
-
-
-

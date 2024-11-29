@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="TOPT" />
+        <module name="save-image" />
+        <module name="springboot-SDImageEdit" />
+        <module name="back-register" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="back_api" target="9" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="TOPT" options="-parameters" />
+      <module name="back-register" options="-parameters" />
+      <module name="back_api" options="-parameters" />
+      <module name="save-image" options="-parameters" />
+      <module name="springboot-SDImageEdit" options="-parameters" />
+    </option>
+  </component>
+</project>

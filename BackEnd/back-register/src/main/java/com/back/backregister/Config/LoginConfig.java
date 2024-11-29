@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @ author: rose
  * @ date: 2024-11-20
  * @ version: 1.0
- * @ description:
+ * @ description: 配置拦截器
  */
 @Configuration
 public class LoginConfig implements WebMvcConfigurer {
@@ -19,6 +19,6 @@ public class LoginConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns("/login","/register","/verify");
+        registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns("/login","/register","/verify","/swagger-ui/**");
     }
 }

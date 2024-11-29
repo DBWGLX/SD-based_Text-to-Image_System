@@ -2,7 +2,7 @@ package com.back.backregister.Interceptor;
 
 import ch.qos.logback.core.util.StringUtil;
 
-import com.back.backregister.pojo.Result;
+import com.back.backregister.Do.Result;
 import com.back.backregister.utils.JwtUtils;
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;

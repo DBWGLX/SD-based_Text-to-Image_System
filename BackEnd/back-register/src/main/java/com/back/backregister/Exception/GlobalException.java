@@ -1,6 +1,6 @@
 package com.back.backregister.Exception;
 
-import com.back.backregister.pojo.Result;
+import com.back.backregister.Do.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

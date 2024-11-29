@@ -1,4 +1,4 @@
-package com.back.backregister.pojo;
+package com.back.backregister.Do;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
