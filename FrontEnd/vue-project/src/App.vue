@@ -1,54 +1,151 @@
-<script setup></script>
-
 <template>
   <div id="app">
+    <!-- 导航栏 -->
+    <header>
+      <nav class="navbar">
+        <div class="logo">
+          <h2>SD Project</h2>
+        </div>
+        <ul class="menu">
+          <li><a href="./">Home</a></li>
+          <li><a href="app">App</a></li>
+          <li><a href="#About">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <!-- 右边的：登录/注册/退出按钮 -->
+        <div class="auth-buttons">
+          <!-- 未登录时显示 Sign in 和 Log in 按钮 -->
+          <button 
+            v-if="!isAuthenticated" 
+            class="button-primary" 
+            @click="signIn">
+            Sign in
+          </button>
+          <button 
+            v-if="!isAuthenticated" 
+            class="button-secondary" 
+            @click="login">
+            Log in
+          </button>
+
+          <!-- 已登录时显示 UserProfile 和 Logout 按钮 -->
+          <router-link v-if="isAuthenticated" to="/user">
+            <button class="button-primary">UserProfile</button>
+          </router-link>
+          <button v-if="isAuthenticated" class="button-secondary" @click="logout">
+            Logout
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- 页面内容 -->
     <router-view></router-view>
-
-    <div class="router-links"> 
-      <div class="left-links">
-        <router-link to="/">
-          <el-link type="primary">Home</el-link>   <!-- 使用element组件美化 -->
-        </router-link>
-        <router-link to="/login">
-          <el-link type="primary">Login</el-link>  
-        </router-link>        
-      </div>
-     
-      <!-- 添加登录链接 -->
-      <div class="right-links">
-          <router-link to="/app">
-            <el-link type="primary">App</el-link>  
-          </router-link>
-          <router-link to="/user" >
-            <el-link type="primary">UserProfile</el-link>  
-          </router-link>
-      </div>
-
-    </div>
   </div>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const isAuthenticated = ref(localStorage.getItem('isAuthenticated') === 'true'); // 初始化时从 localStorage 获取登录状态
+
+const signIn = () => {
+  router.push('/signup'); // 跳转到注册页面
+};
+
+const login = () => {
+  router.push('/login'); // 跳转到登录页面
+};
+
+const logout = () => {
+  localStorage.setItem('isAuthenticated', 'false'); // 清除登录状态
+  isAuthenticated.value = false; // 更新登录状态
+  router.push('/'); // 跳转到首页
+};
+</script>
 
 <style scoped>
 #app {
   display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* 确保应用至少占满整个视口高度 */
+  flex-direction: column; /* 修改为纵向排列 */
+  min-height: 100vh;
   margin: 0;
 }
 
-.router-links {
-  display: flex;
-  justify-content: space-between;
-  position: fixed;
-  bottom: 0px;/* 距离底部 */
+header {
   width: 100%;
-  padding: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  background-color: #fff;
+  z-index: 1000;
 }
 
+main {
+  margin-top: 60px; /* 给页面内容留出顶部空间 */
+}
 
-.left-links,
-.right-links {
+/* 导航栏 */
+.navbar {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 25px 50px;
+  box-sizing: border-box; /* 确保宽度包括内边距 */
+}
+
+.logo h2 {
+  margin: 0;
+  color: #333;
+}
+
+.menu {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
+  margin-left: 16px;
+  padding: 0;
+}
+
+.menu li a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.auth-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: auto;
+}
+
+.auth-buttons button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.button-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+.button-secondary {
+  background-color: #fff;
+  color: #007bff;
+  border: 1px solid #007bff ;
+}
+
+.auth-buttons button:hover {
+  background-color: 1px solid #0056b3;
 }
 </style>

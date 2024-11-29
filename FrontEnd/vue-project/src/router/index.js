@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/components/Home.vue'; // 确保路径正确
-//import MyComponent from '@/components/MyComponent.vue'; // 确保路径正确
 import Login from '@/components/Login.vue';// 导入登录组件
 import AppInterface from '@/components/AppInterface.vue'; // 导入应用界面组件
 import UserProfile  from '@/components/UserProfile.vue'; // 导入用户信息组件
