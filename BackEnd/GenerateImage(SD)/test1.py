@@ -8,11 +8,24 @@ import torch
 import os
 import random
 import requests
-
+import jwt 
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 
 # 创建 Flask 应用
 app = Flask(__name__)
 CORS(app)  # 允许所有跨域请求
+
+# 验证 JWT
+sign_key = "text-to-image"
+def is_valid_jwt(token):
+    try:
+        jwt.decode(token, sign_key, algorithms=["HS256"])
+        return True
+    except ExpiredSignatureError:
+        return False
+    except InvalidTokenError:
+        return False
+
 
 # 加载模型
 pipe = StableDiffusionPipeline.from_single_file(
@@ -28,8 +41,13 @@ pipe = pipe.to(device)
 # 定义路由
 @app.route('/generate', methods=['POST'])
 def generate_image():
-    # 获取请求中的数据
+    # 0.获取请求中的数据
     data = request.json
+
+    # 1.验证token
+    jwt_token = request.headers.get('Authorization')
+    if not jwt_token or not is_valid_jwt(jwt_token):
+        return jsonify({"error": "Invalid or expired JWT token"}), 403
 
     # 提取参数
     user_id = data.get("user_id", "default_user")
@@ -38,7 +56,7 @@ def generate_image():
     negative_prompt = data.get("negative_prompt", "lowres, bad anatomy, bad hands, text, error, mssing fingers,extra digits, fewer digits, cropped, worst quality,low quality,normal quality,jpeg artifacts, signature, watermark,username, blurry")
     num_inference_steps = data.get("num_inference_steps", 30)
 
-    # 翻译
+    # 2.翻译
     # translator = Translator(from_lang="en", to_lang="zh-CN")
     dataT = {
         "prompt": prompt
@@ -104,7 +122,7 @@ def generate_image():
     # 是否返回一个字典而不是简单的输出图像
     # return_dict = data.get("return_dict", True)
 
-    # 生成图像 #
+    # 3.生成图像 #
     # image = pipe(prompt, num_inference_steps=num_inference_steps, width=width, height=height).images[0]
     image = pipe(
         prompt=prompt,

@@ -22,6 +22,13 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
+        String uri = req.getRequestURI();
+
+        // 如果是 Swagger 的路径，直接跳过 token 校验
+        if (uri.startsWith("/swagger-ui") || uri.startsWith("/v3/api-docs")) {
+            return true;
+        }
+
         Gson gson = new Gson();
         String jwt =  req.getHeader("token");
 

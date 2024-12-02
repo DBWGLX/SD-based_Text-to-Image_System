@@ -118,6 +118,14 @@
             <artifactId>gson</artifactId>
             <version>2.10.1</version> <!-- 请检查最新版本 -->
         </dependency>
+
+        <!-- 王雅贤接着配置swagger -->
+        <!-- swagger -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.6.0</version> <!-- 使用最新版本 -->
+        </dependency>
         <!--验证码工具-->
         <dependency>
             <groupId>cn.hutool</groupId>
