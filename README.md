@@ -1,3 +1,9 @@
+![REPO SIZE](https://img.shields.io/github/repo-size/DBWGLX/SD-based_Text-to-Image_System.svg)
+![CODE SIZE](https://img.shields.io/github/languages/code-size/DBWGLX/SD-based_Text-to-Image_System.svg)
+![License](https://img.shields.io/github/license/DBWGLX/SD-based_Text-to-Image_System.svg)
+![](https://img.shields.io/badge/%20史诗%20-8A2BE2)
+
+
 # Diffusion-based Text-to-Image System
 
 ![f15645f05c872c7b9682b25231e2c86c](https://github.com/user-attachments/assets/64f161ef-9e77-4706-9317-9140a536e494)
