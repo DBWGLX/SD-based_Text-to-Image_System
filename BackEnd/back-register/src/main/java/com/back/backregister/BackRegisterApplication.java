@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 
-@MapperScan("com.back.back-register.Mapper")
+@MapperScan("com.back.backregister.Mapper")
 @SpringBootApplication
 public class BackRegisterApplication {
 

@@ -229,10 +229,13 @@ export default {
       this.isGenerating = true; // 设置为正在生成
       this.isGenerateDisable = true;
       try {
+        const token = localStorage.getItem('authToken');
+        console.log('Token:', token); 
         const response = await fetch('http://172.30.207.108:5000/generate', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : '',
           },
           body: JSON.stringify({
             prompt: this.prompt,
@@ -246,7 +249,7 @@ export default {
         });
 
         if (!response.ok) {
-          throw new Error('网络响应不是一个 200: ${errorText}');
+          throw new Error(`网络响应不是一个 200: ${response.statusText}`);
         }
 
         const imageBlob = await response.blob(); // 将响应解析为 Blob 对象

@@ -55,38 +55,39 @@ export default {
       }
     },
     async login() {
-  try {
-    // 向后端发送登录请求
-    const response = await axios.post('http://localhost:8080/api/auth/login', {
-      username: this.username,
-      password: this.password,
-      otp: this.otp
-    });
+    try {
+      // 向后端发送登录请求
+      const response = await axios.post('http://localhost:8080/api/auth/login', {
+        username: this.username,
+        password: this.password,
+        otp: this.otp
+      });
 
-    // 检查后端返回的数据
-    if (response.data.code == true) { // 假设后端成功时的状态码为200
-      // 将 JWT 存入 localStorage
-      const token = response.data.data; // 根据后端返回的 JSON 结构获取 token
-      localStorage.setItem('authToken', token);
-      
-      // 将用户的登录状态记录
-      localStorage.setItem('isAuthenticated', 'true');
-      
-      // 跳转到目标页面
-      this.$router.push('/app');
-    } else {
-      // 如果登录失败，显示错误信息
-      this.errorMessage = response.data.message || 'Invalid credentials';
+      // 检查后端返回的数据
+      if (response.data.code == true) { // 假设后端成功时的状态码为200
+        // 将 JWT 存入 localStorage
+        const token = response.data.data; // 根据后端返回的 JSON 结构获取 token
+        localStorage.setItem('authToken', token);
+        
+        // 将用户的登录状态记录
+        localStorage.setItem('isAuthenticated', 'true');
+        
+        // 跳转到目标页面
+        this.$router.push('/app');
+        
+      } else {
+        // 如果登录失败，显示错误信息
+        this.errorMessage = response.data.message || 'Invalid credentials';
+      }
+    } catch (error) {
+      // 捕获请求错误
+      this.errorMessage = 'Failed to login. Please try again later.';
+      console.error(error);
     }
-  } catch (error) {
-    // 捕获请求错误
-    this.errorMessage = 'Failed to login. Please try again later.';
-    console.error(error);
   }
-}
 
-  }
-};
+    }
+  };
 </script>
 
 <style scoped>

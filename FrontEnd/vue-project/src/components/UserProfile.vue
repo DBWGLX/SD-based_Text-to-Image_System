@@ -300,6 +300,7 @@ methods: {
 <style scoped>
 .common-layout {
   min-height: 100vh;
+  padding : 100px;
 }
 
 .el-container {

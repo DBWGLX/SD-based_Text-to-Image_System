@@ -1,5 +1,5 @@
 # 模块导入
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 from diffusers import StableDiffusionPipeline
 from datetime import datetime
@@ -14,6 +14,19 @@ from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 # 创建 Flask 应用
 app = Flask(__name__)
 CORS(app)  # 允许所有跨域请求
+
+# -1.配置静态文件夹 【# 设置图片文件夹路径】
+app.config['IMAGE_FOLDER'] = 'image'  
+# 路由：提供访问存储的图片
+@app.route('/image/<filename>', methods=['GET'])
+def get_image(filename):
+    try:
+        # 使用 send_from_directory 函数从 'image' 文件夹返回图片
+        return send_from_directory(app.config['IMAGE_FOLDER'], filename)
+    except FileNotFoundError:
+        return jsonify({"error": "Image not found"}), 404
+
+
 
 # 验证 JWT
 sign_key = "text-to-image"
@@ -46,9 +59,11 @@ def generate_image():
 
     # 1.验证token
     jwt_token = request.headers.get('Authorization')
+    print(f"Token received: {jwt_token}")
     if not jwt_token or not is_valid_jwt(jwt_token):
         return jsonify({"error": "Invalid or expired JWT token"}), 403
 
+    print("token verified")
     # 提取参数
     user_id = data.get("user_id", "default_user")
     # 描述

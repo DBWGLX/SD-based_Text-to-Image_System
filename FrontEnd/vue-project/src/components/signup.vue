@@ -42,10 +42,10 @@
           <button type="submit" class="submit-button">Sign Up</button>
         </form>
       </div>
-    </div>
-  </template>
+    </div>  
+</template>
   
-  <script setup>
+<script setup>
   import { ref } from 'vue';
   
   // 定义表单数据
@@ -133,9 +133,9 @@
       alert('注册成功!');
     }
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .signup-container {
     display: flex;
     justify-content: center;
@@ -143,6 +143,7 @@
     height: 100vh;
     background-color: #f0f0f0;
     margin: 0;
+    padding: 90px;
   }
   
   .signup-card {

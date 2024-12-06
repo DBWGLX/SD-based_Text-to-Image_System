@@ -36,6 +36,7 @@
           <button v-if="isAuthenticated" class="button-secondary" @click="logout">
             Logout
           </button>
+          
         </div>
       </nav>
     </header>
@@ -46,11 +47,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref , onMounted, onBeforeUnmount } from 'vue'; //onMounted 是 Vue 3 中的一个 Composition API 钩子
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const isAuthenticated = ref(localStorage.getItem('isAuthenticated') === 'true'); // 初始化时从 localStorage 获取登录状态
+
 
 const signIn = () => {
   router.push('/signup'); // 跳转到注册页面
@@ -59,6 +61,22 @@ const signIn = () => {
 const login = () => {
   router.push('/login'); // 跳转到登录页面
 };
+
+// 登录状态改变时处理 storage 事件
+const handleStorageChange = (event) => {
+  if (event.key === 'isAuthenticated') {
+    isAuthenticated.value = event.newValue === 'true';
+  }
+};
+// 生命周期钩子，组件挂载时添加事件监听，卸载时移除 【希望登录后可以自动刷新界面】
+onMounted(() => {
+  window.addEventListener('storage', handleStorageChange);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('storage', handleStorageChange);
+});
+
 
 const logout = () => {
   localStorage.setItem('isAuthenticated', 'false'); // 清除登录状态

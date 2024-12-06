@@ -39,6 +39,7 @@ public class LoginController {
     //登录后发送验证码到用户邮箱
     @PostMapping("/api/auth/login/totp")
     public Result send(@RequestBody Users user) {
+        System.out.println(114514);
         if(user==null){
             return Result.error("登录信息为空");
         }
