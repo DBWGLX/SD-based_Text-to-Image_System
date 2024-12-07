@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface userMapper {
     //用户登录
-    @Select("select * from users where username=#{username} and password=#{password}")
+    @Select("select * from users where username=#{username}")
     Users login(Users u);
 }

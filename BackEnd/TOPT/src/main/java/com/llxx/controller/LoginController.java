@@ -5,6 +5,7 @@ import com.llxx.pojo.Users;
 import com.llxx.service.userService;
 import com.llxx.utils.EmailUtil;
 import com.llxx.utils.JwtUtils;
+import com.llxx.utils.PassUtils;
 import com.llxx.utils.TotpUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,8 @@ public class LoginController {
             return Result.error("登录信息为空");
         }
         Users loginUser=userservice.login(user);//查找
-        if(loginUser==null){
+        //查不到该用户或者加密后密码的和查询的的不一样
+        if(loginUser==null|| !PassUtils.verifyPassword(user.getPassword(),loginUser.getPassword())){
             return Result.error("用户名或者密码错误");
         }
         String email=loginUser.getEmail();
@@ -91,7 +93,7 @@ public class LoginController {
                     map.put("email",user.getEmail());
                     String jwt= JwtUtils.generateJwt(map);
                     JWTCache.put(loginUser.getUsername(),jwt);//缓存jwt
-                    return  Result.success(jwt);// 返回成功响应
+                    return  Result.success();// 返回成功响应
                 } else {
                     return  Result.error("验证码错误");// 验证失败
                 }
