@@ -35,8 +35,7 @@ public class CaptchaController {
         String imageBase64 = circleCaptcha.getImageBase64();
         // 如果没传入参数，就随机生成一个uuid 作为id
         captchaId = Optional.ofNullable(captchaId).orElseGet(() -> UUID.randomUUID().toString());
-        // 讲id\code 保存到redis里，待完成
-
+        // 讲id\code 保存到redis里，待完
 
         return CaptcahVO.builder()
                 .captchaId(captchaId)

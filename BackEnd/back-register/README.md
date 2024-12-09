@@ -2,6 +2,9 @@
 
 ![image-20241120085502138](https://raw.githubusercontent.com/Rosewwwfr/blog-imgs/main/blog/image-20241120085502138.png)
 
+
+修改注册，数据库连接远程数据库，重新设计实体类，创建存储验证码的数据库表，优化邮件发送模板。
+
 /verify ：
 
 请求：

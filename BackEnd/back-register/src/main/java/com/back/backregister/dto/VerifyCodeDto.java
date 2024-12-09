@@ -20,4 +20,5 @@ public class VerifyCodeDto {
     private String email;
     private String code;
     private LocalDateTime createTime;
+    private LocalDateTime expirationTime;
 }
