@@ -4,10 +4,16 @@
 
 <mapper namespace="com.back.backregister.Mapper.VerifyCodeMapper">
     <insert id="insertCode">
-        insert into VERIFYCODE (email, code,create_time) values(#{email},#{code},#{createTime})
+        insert into VERIFYCODE (email, code,create_time,expiration_time) values(#{email},#{code},#{createTime},#{expirationTime})
     </insert>
+    <delete id="deleteCode">
+        delete from VERIFYCODE where email = #{email}
+    </delete>
 
     <select id="getCode" resultType="String">
         SELECT CODE FROM verifycode WHERE email = #{EMAIL};
+    </select>
+    <select id="getExperationTime" resultType="java.time.LocalDateTime">
+        SELECT verifycode.expiration_time FROM verifycode WHERE email = #{EMAIL};
     </select>
 </mapper>

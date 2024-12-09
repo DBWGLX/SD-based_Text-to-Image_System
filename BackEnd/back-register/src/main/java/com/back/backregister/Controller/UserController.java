@@ -37,12 +37,12 @@ public class UserController {
 
     @PostMapping("/register")
     public Result add(@RequestBody RegisterDto registerDto)
-    {   Integer Id = userService.register(registerDto);
-        if( Id== null)
+    {   String message = userService.register(registerDto);
+        if( message.equals("注册成功！需要返回登录页面！"))
         {
-            return Result.error("用户名或邮箱已经存在！注册失败！");
+            return Result.success(message);
         }
-        return Result.success("用户创建成功，id为:"+Id);
+        return Result.error(message);
     }
 
     @PostMapping("/verify")

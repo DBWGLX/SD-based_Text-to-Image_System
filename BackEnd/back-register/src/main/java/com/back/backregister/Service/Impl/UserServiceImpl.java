@@ -15,9 +15,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,12 +49,13 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 对包含 验证码的请求进行处理。
+     *
      * @param registerDto web端传进来的参数。
      * @return 返回 用户的id,感觉有点多余
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Integer register(RegisterDto registerDto) {
+    public String register(RegisterDto registerDto) {
         // 如果已经存在用户了，则无法注册
         log.info("要注册的用户信息：{}，{}，{}",registerDto.getUsername(),registerDto.getPassword(),registerDto.getEmail());
         if(userMapper.getByUserNameOrEmail(registerDto.getUsername()) != null)
@@ -66,6 +65,15 @@ public class UserServiceImpl implements UserService {
             log.info("用户不存在，可以注册！");
             //这里去获取user里的code
             // String code = verifyCodes.get(registerDto.getEmail());
+
+            // 验证是否过期
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime experation = verifyCodeMapper.getExperationTime(registerDto.getEmail());
+            if(experation!= null && now.isAfter(experation))
+            {
+                log.info("验证码已过期！");
+                return "验证码已过期！";
+            }
             // 验证code是否正确且验证对应的email(上面获取code的过程就判断了)
             // 该code需要从数据库中取
             String code = verifyCodeMapper.getCode(registerDto.getEmail());
@@ -76,20 +84,22 @@ public class UserServiceImpl implements UserService {
                 String secretPass = PassUtils.encryptPassword(registerDto.getPassword());
                 registerDto.setPassword(secretPass);
                 userMapper.add(registerDto);
-                return userMapper.getIdByUserName(registerDto);
+                return "注册成功！需要返回登录页面！";
             }
             // 注册失败
-            return null;
+            return "注册失败！";
         }
     }
 
     /**
      * 点击发送验证码给对应的邮箱
+     *
      * @param
+     * @return
      */
     @Override
     @Transactional
-    public void sendEmail(EmailDto emailDto) {
+    public String sendEmail(EmailDto emailDto) {
 
         //生成对应的验证码取uuid的0-6位
         String code = RandomUtils.getSixRandomCode();
@@ -101,6 +111,19 @@ public class UserServiceImpl implements UserService {
         verifyCodeDto.setCode(code);
         verifyCodeDto.setEmail(emailDto.getEmail());
         verifyCodeDto.setCreateTime(LocalDateTime.now());
+        // 5分钟过期
+        verifyCodeDto.setExpirationTime(LocalDateTime.now().plusMinutes(5));
+        log.info("验证码生成时间：{}",verifyCodeDto.getCreateTime());
+        log.info("验证码过期时间：{}",verifyCodeDto.getExpirationTime());
+
+        // 这里要判断  邮箱是否已经存在
+        if(verifyCodeMapper.getCode(emailDto.getEmail()) != null)
+        {
+            log.info("数据库中已有验证码！删除已有验证码！");
+            // 这里要删除原来的验证码
+            verifyCodeMapper.deleteCode(emailDto.getEmail());
+
+        }
         verifyCodeMapper.insertCode(verifyCodeDto);
         log.info("数据存储成功");
 
@@ -126,6 +149,7 @@ public class UserServiceImpl implements UserService {
         }
         mailSender.send(mimeMessage);
         log.info("邮件发送成功");
+        return "验证码发送成功！";
     }
 
     /**

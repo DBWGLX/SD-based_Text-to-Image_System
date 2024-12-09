@@ -10,7 +10,7 @@ spring:
   #数据库连接信息
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/SD
+    url: jdbc:mysql://172.30.207.108:3306/SD
     username: root
     password: 123456
   #文件上传配置
