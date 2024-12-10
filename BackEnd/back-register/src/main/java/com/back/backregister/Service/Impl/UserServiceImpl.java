@@ -58,14 +58,14 @@ public class UserServiceImpl implements UserService {
     public String register(RegisterDto registerDto) {
         // 如果已经存在用户了，则无法注册
         log.info("要注册的用户信息：{}，{}，{}",registerDto.getUsername(),registerDto.getPassword(),registerDto.getEmail());
-        if(userMapper.getByUserNameOrEmail(registerDto.getUsername()) != null)
+        if(userMapper.getByUserNameOrEmail(registerDto.getUsername(),registerDto.getEmail()) != null)
         {
-            return null;
+            log.info("用户名或邮箱已存储，注册失败");
+            return "用户名或邮箱已存在，注册失败！";
         }else{ // 没有找到用户
             log.info("用户不存在，可以注册！");
             //这里去获取user里的code
             // String code = verifyCodes.get(registerDto.getEmail());
-
             // 验证是否过期
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime experation = verifyCodeMapper.getExperationTime(registerDto.getEmail());
@@ -80,6 +80,8 @@ public class UserServiceImpl implements UserService {
             // 验证code是否正确且验证对应的email(上面获取code的过程就判断了)
             if(code != null && code.equals(registerDto.getCode()))
             {
+                // 校验成功后将verify对应的数据删除
+                verifyCodeMapper.deleteCode(registerDto.getEmail());
                 // 这里要处理user的password !
                 String secretPass = PassUtils.encryptPassword(registerDto.getPassword());
                 registerDto.setPassword(secretPass);
