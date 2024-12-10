@@ -47,6 +47,9 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router"; // 引入路由对象
+// 初始化路由对象
+const router = useRouter();
 
 // 表单数据
 const username = ref("");
@@ -141,25 +144,34 @@ const handleSubmit = async () => {
       username: username.value,
       password: password.value,
       email: email.value,
-      // phone: phone.value,
+      phone: phone.value,
       code: verificationCode.value,
     });
 
-    if (data.code==true) {
-      alert("注册成功！");
+    const result = response.data;
+    console.log("后端返回的数据：", result);
+
+    if (result.code === true) {
+      alert(result.data || "注册成功！");
+      
       // 清空表单
       username.value = "";
       password.value = "";
       email.value = "";
       phone.value = "";
       verificationCode.value = "";
+
+      console.log("正在跳转到登录页面...");
+      await router.push('/login'); // 跳转到登录页面
     } else {
-      alert(response.data.message || "注册失败！");
+      alert(result.msg || "注册失败！");
     }
   } catch (error) {
+    console.error("注册请求失败：", error.message);
     alert("注册失败，请检查网络连接！");
   }
 };
+
 </script>
 
 <style scoped>
