@@ -1,20 +1,17 @@
-package com.llxx.pojo;
+package com.llxx.Dto;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value ="users")
-public class Users {
-    @TableId
+@Accessors(chain = true)
+public class UserDto {
     private Integer userId;
     private String username;
-    private String password;
     private String email;
     private String phone;
 }

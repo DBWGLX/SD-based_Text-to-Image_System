@@ -4,11 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce147810-3c60-4a1d-adf3-8f58c3da52c2" name="更改" comment="" />
+    <list default="true" id="ce147810-3c60-4a1d-adf3-8f58c3da52c2" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/JDBC-history-images/src/main/java/com/llxx/Dto/UserDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JDBC-history-images/src/main/java/com/llxx/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JDBC-history-images/src/main/java/com/llxx/mapper/UsersMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JDBC-history-images/src/main/java/com/llxx/service/UsersService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JDBC-history-images/src/main/java/com/llxx/service/impl/UsersServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JDBC-history-images/src/main/java/com/llxx/pojo/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/JDBC-history-images/src/main/java/com/llxx/pojo/Users.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -20,10 +36,10 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="customMavenHome" value="C:\env\apache-maven-3.9.9" />
-        <option name="localRepository" value="C:\env\apache-maven-3.9.9\maven-repo" />
+        <option name="customMavenHome" value="D:\Maven\apache-maven-3.9.9" />
+        <option name="localRepository" value="D:\Maven\apache-maven-3.9.9\maven_repo" />
         <option name="mavenHomeTypeForPersistence" value="CUSTOM" />
-        <option name="userSettingsFile" value="C:\env\apache-maven-3.9.9\conf\settings.xml" />
+        <option name="userSettingsFile" value="D:\Maven\apache-maven-3.9.9\conf\settings.xml" />
       </MavenGeneralSettings>
     </option>
   </component>
@@ -43,9 +59,10 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.BackRegisterApplication.executor": "Run",
+    "Spring Boot.SaveImageApplication.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/86133/Desktop/Project/SD-based_Text-to-Image_System/BackEnd/back-register",
+    "last_opened_file_path": "D:/文生图/SD-based_Text-to-Image_System/BackEnd",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -81,7 +98,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.BackRegisterApplication">
+  <component name="RunManager" selected="Spring Boot.SaveImageApplication">
     <configuration name="BackRegisterApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="back-register" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.back.backregister.BackRegisterApplication" />
@@ -114,8 +131,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
       </set>
     </attachedChunks>
   </component>
@@ -138,6 +155,7 @@
       <workItem from="1733715911932" duration="6000" />
       <workItem from="1733720536411" duration="64000" />
       <workItem from="1733720604796" duration="14000" />
+      <workItem from="1734001508855" duration="3086000" />
     </task>
     <task id="LOCAL-00001" summary="修改注册，数据库连接远程数据库，重新设计实体类，创建存储验证码的数据库表，优化邮件发送模板。">
       <option name="closed" value="true" />
@@ -152,6 +170,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="修改注册，数据库连接远程数据库，重新设计实体类，创建存储验证码的数据库表，优化邮件发送模板。" />
