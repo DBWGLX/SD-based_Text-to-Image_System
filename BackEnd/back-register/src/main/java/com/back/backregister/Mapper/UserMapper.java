@@ -17,7 +17,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper {
 
     // 根据username查询是否有用户
-    UserDo getByUserNameOrEmail(String username);
+    UserDo getByUserNameOrEmail(String username,String email);
 
     void add(RegisterDto registerDto);
 
