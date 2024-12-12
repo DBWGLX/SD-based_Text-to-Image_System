@@ -25,6 +25,12 @@
 **管理员批量删除历史记录:**
 /api/history/admins/{historyIds}
 ![image](https://github.com/user-attachments/assets/682dcc2d-985e-4656-b8c6-c74e4fce21bb)
+<br><br>
+
+**用户获取信息：**
+/api/user/{userId}
+![image](https://github.com/user-attachments/assets/b3a0d7f2-f80c-4558-a97a-33f43aececc7)
+
 
 
 
