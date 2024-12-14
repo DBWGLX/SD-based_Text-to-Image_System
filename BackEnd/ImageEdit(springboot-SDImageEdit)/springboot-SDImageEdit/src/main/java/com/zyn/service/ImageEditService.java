@@ -4,43 +4,44 @@ import com.zyn.dao.ImageEditDao;
 import com.zyn.model.ImageEditRequest;
 import com.zyn.model.ImageEdits;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
-
 
 @Service
 public class ImageEditService {
 
-//    private final ImageEditDao imageEditDao;
-//
-//    @Autowired
-//    public ImageEditService(ImageEditDao imageEditDao) {
-//        this.imageEditDao = imageEditDao;
-//    }
     @Autowired
     private ImageEditDao imageEditDao;
 
-    public ResponseEntity<?> editImage(ImageEditRequest imageEditRequest) {
+    public ResponseEntity<byte[]> editImage(ImageEditRequest imageEditRequest) {
         try {
-            // 读取原始图像
-            BufferedImage originalImage = imageEditDao.readImage(imageEditRequest.getImagePath());
+            // 从Base64编码的图片数据创建BufferedImage对象
+            BufferedImage originalImage = imageEditRequest.toBufferedImage();
 
             // 应用编辑指令
             BufferedImage editedImage = applyEdits(originalImage, imageEditRequest.getEdits());
 
-            // 保存编辑后的图像
-            imageEditDao.saveImage(editedImage, "edited_image.png");
+            // 将编辑后的图像转换为二进制数据
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(editedImage, "png", outputStream);
+            byte[] imageBytes = outputStream.toByteArray();
 
-            // 返回成功响应和编辑后的图像URL
-            return ResponseEntity.ok().body(Map.of("success", true, "message", "图像编辑成功", "image_url", "edited_image.png"));
+            // 返回成功响应和编辑后的图像二进制数据
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_PNG)
+                    .body(imageBytes);
         } catch (IOException e) {
             // 处理错误
-            return ResponseEntity.internalServerError().body(Map.of("success", false, "message", "图像编辑失败"));
+            return ResponseEntity.internalServerError().body(null);
         }
     }
 
@@ -98,9 +99,5 @@ public class ImageEditService {
     private int adjustContrast(int pixelValue, int contrast) {
         int adjustedValue = (pixelValue * (100 + contrast)) / 100;
         return Math.min(255, Math.max(0, adjustedValue));
-    }
-
-    public String getEditedImagePath() {
-        return "edited_image.png";
     }
 }
