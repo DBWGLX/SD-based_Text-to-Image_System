@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- 导航栏 -->
-    <header>
+    <header v-if="!$route.meta.hideHeader">
       <nav class="navbar">
         <div class="logo">
           <h2>SD Project</h2>
@@ -16,16 +16,18 @@
         <!-- 右边的：登录/注册/退出按钮 -->
         <div class="auth-buttons">
           <!-- 未登录时显示 Sign in 和 Log in 按钮 -->
-          <button 
-            v-if="!isAuthenticated" 
-            class="button-primary" 
-            @click="signIn">
+          <button
+            v-if="!isAuthenticated"
+            class="button-primary"
+            @click="signIn"
+          >
             Sign in
           </button>
-          <button 
-            v-if="!isAuthenticated" 
-            class="button-secondary" 
-            @click="login">
+          <button
+            v-if="!isAuthenticated"
+            class="button-secondary"
+            @click="login"
+          >
             Log in
           </button>
 
@@ -33,10 +35,13 @@
           <router-link v-if="isAuthenticated" to="/user">
             <button class="button-primary">UserProfile</button>
           </router-link>
-          <button v-if="isAuthenticated" class="button-secondary" @click="logout">
+          <button
+            v-if="isAuthenticated"
+            class="button-secondary"
+            @click="logout"
+          >
             Logout
           </button>
-          
         </div>
       </nav>
     </header>
@@ -47,41 +52,39 @@
 </template>
 
 <script setup>
-import { ref , onMounted, onBeforeUnmount } from 'vue'; //onMounted 是 Vue 3 中的一个 Composition API 钩子
-import { useRouter } from 'vue-router';
+import { ref, onMounted, onBeforeUnmount } from "vue"; //onMounted 是 Vue 3 中的一个 Composition API 钩子
+import { useRouter } from "vue-router";
 
 const router = useRouter();
-const isAuthenticated = ref(localStorage.getItem('isAuthenticated') === 'true'); // 初始化时从 localStorage 获取登录状态
-
+const isAuthenticated = ref(localStorage.getItem("isAuthenticated") === "true"); // 初始化时从 localStorage 获取登录状态
 
 const signIn = () => {
-  router.push('/signup'); // 跳转到注册页面
+  router.push("/signup"); // 跳转到注册页面
 };
 
 const login = () => {
-  router.push('/login'); // 跳转到登录页面
+  router.push("/login"); // 跳转到登录页面
 };
 
 // 登录状态改变时处理 storage 事件
 const handleStorageChange = (event) => {
-  if (event.key === 'isAuthenticated') {
-    isAuthenticated.value = event.newValue === 'true';
+  if (event.key === "isAuthenticated") {
+    isAuthenticated.value = event.newValue === "true";
   }
 };
 // 生命周期钩子，组件挂载时添加事件监听，卸载时移除 【希望登录后可以自动刷新界面】
 onMounted(() => {
-  window.addEventListener('storage', handleStorageChange);
+  window.addEventListener("storage", handleStorageChange);
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener('storage', handleStorageChange);
+  window.removeEventListener("storage", handleStorageChange);
 });
 
-
 const logout = () => {
-  localStorage.setItem('isAuthenticated', 'false'); // 清除登录状态
+  localStorage.setItem("isAuthenticated", "false"); // 清除登录状态
   isAuthenticated.value = false; // 更新登录状态
-  router.push('/'); // 跳转到首页
+  router.push("/"); // 跳转到首页
 };
 </script>
 
@@ -160,7 +163,7 @@ main {
 .button-secondary {
   background-color: #fff;
   color: #007bff;
-  border: 1px solid #007bff ;
+  border: 1px solid #007bff;
 }
 
 .auth-buttons button:hover {
