@@ -196,6 +196,7 @@
 
 <script>
 import rollingDiceIcon from '@/assets/rollingDiceIcon.svg'; // 使用 import 引入 SVG 文件
+import { generateCodeFrame } from 'vue/compiler-sfc';
 export default {
   mounted() {
     // 在 mounted 钩子中检查 $refs.image 是否已经渲染
@@ -203,7 +204,9 @@ export default {
       console.log('Image has been rendered!');
     } else {
       console.log('Image is not rendered yet!');
-    }
+    };
+
+    this.generateImage();
   },
   data() {
     return {
@@ -215,13 +218,15 @@ export default {
       seed: null, // 默认值
       guidance_scale: 7.5, // 默认值
       rollingDiceIconPath: rollingDiceIcon,
-      imageUrl: 'https://webcnstatic.yostar.net/ba_cn_web/prod/upload/wallpaper/dMIq1HzJ.jpeg', // 初始图片 URL
-      // imageUrl: '	https://lam-l.github.io/Landing-Pages/image.png',
+      //imageUrl: 'https://webcnstatic.yostar.net/ba_cn_web/prod/upload/wallpaper/dMIq1HzJ.jpeg', // 初始图片 URL
+      imageUrl: '	https://lam-l.github.io/Landing-Pages/image.png',
       isGenerating: false, // 用于控制按钮显示
       brightness: 0,//图片亮度
       contrast: 0,//图片对比度
       isApplyDisable: false,
       isGenerateDisable: false,
+      generatedImageData: null,
+      processing: false,
     };
   },
   methods: {
@@ -253,6 +258,7 @@ export default {
         }
 
         const imageBlob = await response.blob(); // 将响应解析为 Blob 对象
+        this.generatedImageData = imageBlob;
         this.imageUrl = URL.createObjectURL(imageBlob); // 生成可用于 img 标签的 URL
       } catch (error) {
         console.error('请求失败:', error);
@@ -304,50 +310,131 @@ export default {
 
     },
     
-    async applyEditImage() {
-       try {
-        this.isApplyDisable = true;
-        const response = await fetch("http://localhost:8080/api/edit/image", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            imagePath: this.imageUrl, // 服务器上的图片路径
-            edits: {
-              brightness: this.brightness,
-              contrast: this.contrast
-            }
-          }),
-        });
+    // 调整图像亮度
+    applyEditImage() {
+    try {
+      // 禁止重复提交
+      if (this.processing){
+        console.log(this.processing);
+        return;
+      } 
+      console.log(this.processing);
+      this.processing = true;
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+      this.isApplyDisable = true;
+
+      if (!this.generatedImageData) {
+        alert('No image to adjust');
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onloadend = async () => {
+        try {
+          const imageData = reader.result;
+
+          // 改进：高效转换 ArrayBuffer 为 Base64
+          const uint8Array = new Uint8Array(imageData);
+          const binaryString = uint8Array.reduce((data, byte) => data + String.fromCharCode(byte), '');
+          const base64Image = btoa(binaryString);
+
+                    // 动态添加 MIME 类型，构建完整 Base64 Image URL
+          const mimeType = this.generatedImageData.type || 'image/png'; // 默认 'image/png'
+          const base64ImageUrl = `data:${mimeType};base64,${base64Image}`;
+          
+          console.log("Base64 Image URL", base64ImageUrl);
+
+          console.log("base64Image",base64Image)
+
+          // 将亮度和对比度一起传递到后端
+          const response = await fetch("http://localhost:8080/api/edit/image", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              imageData: base64ImageUrl, // 传递 Base64 图像数据
+              edits: {
+                brightness: this.brightness,
+                contrast: this.contrast,
+              },
+            }),
+          });
+
+          const blob = await response.blob();
+          this.imageUrl = URL.createObjectURL(blob); // 更新显示的图像
+          console.log("success");
+
+        } catch (error) {
+          console.error('Error:', error);
+          alert('编辑图像失败');
+        } finally {
+          this.processing = false;
+          this.isApplyDisable = false;
         }
+      };
 
-        const data = await response.json(); // 假设返回的是一个包含图片路径的 JSON
-        this.imageUrl = `http://localhost:8080/${data.image_url}`;
+      reader.onerror = (error) => {
+        console.error('FileReader error:', error);
+        alert('文件读取失败');
+        this.processing = false;
+      };
+
+      // 读取图像数据为 ArrayBuffer
+      reader.readAsArrayBuffer(this.generatedImageData);
       } catch (error) {
-        console.error("编辑图片时出错:", error);
-        alert("编辑图片失败，请检查后端服务是否正常。");
-      }finally{
+        console.error('编辑图片时出错:', error);
+        alert('编辑图片失败，请检查后端服务是否正常。');
+        this.processing = false;
+      } finally {
         this.isApplyDisable = false;
       }
-    }
   },
-  watch: {
-    width(newValue) {
-      if(newValue % 8 !== 0){
-        this.width = Math.round(newValue / 8) * 8;
+    async generateImage() {
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://lam-l.github.io/Landing-Pages/image.png", true);
+        xhr.responseType = "blob"; // 指定响应类型为 Blob
+
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            this.generatedImageData = xhr.response; // 获取图片数据
+            this.imageUrl = URL.createObjectURL(this.generatedImageData); // 显示图像
+          } else {
+            console.error("Image load failed with status: ", xhr.status);
+            alert("生成图像失败");
+          }
+        };
+
+        xhr.onerror = (error) => {
+          console.error("请求出错：", error);
+          alert("请求出错");
+        };
+
+        xhr.send(); // 发送请求
+      } catch (error) {
+        console.error('Error:', error);
+        alert('生成图像失败');
       }
     },
+  },
+  created() {
+    // this.generateImage();
+  },
+watch: {
+  width(newValue) {
+    if(newValue % 8 !== 0){
+      this.width = Math.round(newValue / 8) * 8;
+    }
+  },
 
-    height(newValue) {
-      if(newValue % 8 !== 0){
-        this.height = Math.round(newValue / 8) * 8;
-      }
+  height(newValue) {
+    if(newValue % 8 !== 0){
+      this.height = Math.round(newValue / 8) * 8;
     }
   }
+}
 };
 </script>
 
