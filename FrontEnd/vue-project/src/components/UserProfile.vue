@@ -100,8 +100,8 @@ export default {
     return {
       userInfo: {
         username: "",
-        id: "",
-        phoneNumber: "",
+        userId: "",
+        phone: "",
         email: "",
         cancellation: "注销后不可恢复，请谨慎操作",
       },
@@ -114,24 +114,30 @@ export default {
   methods: {
     // 获取用户信息
     getUserInfo() {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        this.$message.error("Please login first！");
+        return;
+      }
       axios
-        .get("http://localhost:5173/api/user", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        })
+        .get("http://localhost:8080/api/user/" + userId)
         .then((response) => {
           const data = response.data;
+          console.log("用户信息：", data);
           if (data.code) {
             this.userInfo = {
-              id: data.data.id,
+              id: data.data.userId,
               username: data.data.username,
               email: data.data.email,
-              phoneNumber: data.data.phoneNumber,
+              phoneNumber: data.data.phone,
             };
           } else {
+            console.error("获取用户信息失败：", data.msg);
             this.$message.error(data.msg || "获取用户信息失败！");
           }
         })
         .catch((error) => {
+
           console.error("获取用户信息失败：", error);
           this.$message.error("获取用户信息失败，请稍后重试！");
         });
@@ -151,12 +157,14 @@ export default {
 
     // 查看历史记录
     viewUserImages() {
+      const userId = localStorage.getItem("userId");
       axios
-        .get("/history/admins?page=1&size=10", {
+        .get("http://localhost:8080/api/history/" + userId + "?page=1&size=10", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
         .then((response) => {
           const images = response.data.data;
+          console.log("历史记录：", images);
           if (Array.isArray(images)) {
             this.$router.push({
               name: "UserImages",
