@@ -1,6 +1,7 @@
 package com.llxx.controller;
 
 import com.llxx.pojo.Result;
+import com.llxx.pojo.UserMsg;
 import com.llxx.pojo.Users;
 import com.llxx.service.userService;
 import com.llxx.utils.EmailUtil;
@@ -62,7 +63,7 @@ public class LoginController {
         // 发送 OTP 到用户邮箱
         emailutil.sendEmail(email, "文生图系统登录验证码", "您的验证码是: " + otp);
         log.info("发送成功");
-        return Result.success(otp);//返回验证码
+        return Result.success();//返回验证码
     }
 
     //验证验证码
@@ -93,7 +94,8 @@ public class LoginController {
                     map.put("email",user.getEmail());
                     String jwt= JwtUtils.generateJwt(map);
                     JWTCache.put(loginUser.getUsername(),jwt);//缓存jwt
-                    return  Result.success();// 返回成功响应
+                    UserMsg userMsg=new UserMsg().setUserId(loginUser.getUserId()).setJwt(jwt);
+                    return  Result.success(userMsg);// 返回成功响应
                 } else {
                     return  Result.error("验证码错误");// 验证失败
                 }
