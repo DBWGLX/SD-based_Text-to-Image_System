@@ -7,27 +7,19 @@
           <h2>SD Project</h2>
         </div>
         <ul class="menu">
-          <li><a href="./">Home</a></li>
-          <li><a href="app">App</a></li>
+          <li><router-link to="/">Home</router-link></li>
+          <li><router-link to="/app">App</router-link></li>
           <li><a href="#About">About</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#Contact">Contact</a></li>
         </ul>
 
         <!-- 右边的：登录/注册/退出按钮 -->
         <div class="auth-buttons">
           <!-- 未登录时显示 Sign in 和 Log in 按钮 -->
-          <button
-            v-if="!isAuthenticated"
-            class="button-primary"
-            @click="signIn"
-          >
+          <button v-if="!isAuthenticated" class="button-primary" @click="signIn">
             Sign in
           </button>
-          <button
-            v-if="!isAuthenticated"
-            class="button-secondary"
-            @click="login"
-          >
+          <button v-if="!isAuthenticated" class="button-secondary" @click="login">
             Log in
           </button>
 
@@ -35,11 +27,7 @@
           <router-link v-if="isAuthenticated" to="/user">
             <button class="button-primary">UserProfile</button>
           </router-link>
-          <button
-            v-if="isAuthenticated"
-            class="button-secondary"
-            @click="logout"
-          >
+          <button v-if="isAuthenticated" class="button-secondary" @click="logout">
             Logout
           </button>
         </div>
@@ -52,27 +40,30 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue"; //onMounted 是 Vue 3 中的一个 Composition API 钩子
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const isAuthenticated = ref(localStorage.getItem("isAuthenticated") === "true"); // 初始化时从 localStorage 获取登录状态
+const isAuthenticated = ref(localStorage.getItem("isAuthenticated") === "true"); // 初始从 localStorage 获取登录状态
 
+// 注册跳转
 const signIn = () => {
-  router.push("/signup"); // 跳转到注册页面
+  router.push("/signup");
 };
 
+// 登录跳转
 const login = () => {
-  router.push("/login"); // 跳转到登录页面
+  router.push("/login");
 };
 
-// 登录状态改变时处理 storage 事件
+// 监听 localStorage 中登录状态的变化
 const handleStorageChange = (event) => {
   if (event.key === "isAuthenticated") {
     isAuthenticated.value = event.newValue === "true";
   }
 };
-// 生命周期钩子，组件挂载时添加事件监听，卸载时移除 【希望登录后可以自动刷新界面】
+
+// 生命周期钩子
 onMounted(() => {
   window.addEventListener("storage", handleStorageChange);
 });
@@ -81,17 +72,19 @@ onBeforeUnmount(() => {
   window.removeEventListener("storage", handleStorageChange);
 });
 
+// 退出登录逻辑
 const logout = () => {
-  localStorage.setItem("isAuthenticated", "false"); // 清除登录状态
-  isAuthenticated.value = false; // 更新登录状态
-  router.push("/"); // 跳转到首页
+  localStorage.removeItem("token"); // 清除 token
+  localStorage.setItem("isAuthenticated", "false"); // 更新登录状态
+  isAuthenticated.value = false;
+  router.push("/"); // 返回首页
 };
 </script>
 
 <style scoped>
 #app {
   display: flex;
-  flex-direction: column; /* 修改为纵向排列 */
+  flex-direction: column;
   min-height: 100vh;
   margin: 0;
 }
@@ -110,14 +103,14 @@ main {
   margin-top: 60px; /* 给页面内容留出顶部空间 */
 }
 
-/* 导航栏 */
+/* 导航栏样式 */
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   padding: 25px 50px;
-  box-sizing: border-box; /* 确保宽度包括内边距 */
+  box-sizing: border-box;
 }
 
 .logo h2 {
