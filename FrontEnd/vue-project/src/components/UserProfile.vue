@@ -1,6 +1,7 @@
 <template>
   <div class="common-layout">
     <el-container>
+      <!-- 左侧菜单 -->
       <el-aside width="200px">
         <el-menu router :default-active="$route.path" mode="vertical">
           <el-menu-item index="/account-settings">
@@ -12,32 +13,28 @@
         </el-menu>
       </el-aside>
 
+      <!-- 主内容区 -->
       <el-container>
-        <!-- <el-header>
-          用户中心
-        </el-header> -->
-
         <el-main>
           <div class="profile-section">
+            <!-- 头像区域 -->
             <div class="avatar-container">
-              <!-- 头像 -->
-              <img src="https://img.zcool.cn/community/04b4wf2hltswlkpp4qebcs3937.png"
-                style="width: 150px; height: 150px;">
-              <el-button plain class="edit-avatar-btn" @click="showEditAvatarModal">修改头像</el-button>
+              <img
+                src="https://img.zcool.cn/community/04b4wf2hltswlkpp4qebcs3937.png"
+                style="width: 150px; height: 150px;"
+                alt="用户头像"
+              />
             </div>
 
             <el-divider border-style="double" />
 
+            <!-- 用户信息 -->
             <div class="profile-details">
               <div class="profile-item">
                 <div class="item-title">
                   <el-text class="mx-1">姓名</el-text>
                 </div>
-                <div class="item-value">{{ editingName ? '' : userInfo.username }}</div>
-                <el-button plain class="edit-btn" @click="toggleEditName">编辑</el-button>
-                <el-input v-if="editingName" v-model="newName" placeholder="请输入新姓名" class="edit-input"
-                  @keyup.enter="saveName"></el-input>
-                <el-button v-if="editingName" type="primary" @click="saveName">保存</el-button>
+                <div class="item-value">{{ userInfo.username }}</div>
               </div>
 
               <el-divider border-style="double" />
@@ -57,7 +54,6 @@
                   <el-text class="mx-1">手机号</el-text>
                 </div>
                 <div class="item-value">{{ userInfo.phoneNumber }}</div>
-                <el-button plain class="bind1-btn" @click="bindPhoneNumber">立即绑定</el-button>
               </div>
 
               <el-divider border-style="double" />
@@ -67,17 +63,6 @@
                   <el-text class="mx-1">邮箱</el-text>
                 </div>
                 <div class="item-value">{{ userInfo.email }}</div>
-                <el-button plain class="bind2-btn" @click="bindEmail">立即绑定</el-button>
-              </div>
-
-              <el-divider border-style="double" />
-
-              <div class="profile-item">
-                <div class="item-title">
-                  <el-text class="mx-1">密码</el-text>
-                </div>
-                <div class="item-value">{{ userInfo.password }}</div>
-                <el-button plain class="passward-btn" @click="setPassword">设置密码</el-button>
               </div>
 
               <el-divider border-style="double" />
@@ -99,7 +84,6 @@
                 <div class="item-value">{{ userInfo.cancellation }}</div>
                 <el-button type="danger" plain class="cancel-btn" @click="confirmCancellation">注销</el-button>
               </div>
-
             </div>
           </div>
         </el-main>
@@ -109,16 +93,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-
-const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/api', // 指定 API 的基础 URL 和端口号
-  headers: {
-    'Authorization': 'Bearer ' + localStorage.getItem('token'),
-  },
-});
-
+import axios from "axios";
 
 export default {
   data() {
@@ -128,175 +103,103 @@ export default {
         id: "",
         phoneNumber: "",
         email: "",
-        password: "",
-        cancellation: "注销后不可恢复，请谨慎操作"
+        cancellation: "注销后不可恢复，请谨慎操作",
       },
-      editingName: false,
-      newName: ''
     };
   },
   created() {
-  this.getUserInfo();
-},
-methods: {
-  getUserInfo() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      // 通过解码 token 获取用户信息
-      try {
-        const decoded = jwt_decode(token); // 使用 jwt-decode 解码 token
-        // 如果 token 解码成功，就将用户信息保存到 `userInfo`
-        this.userInfo = {
-          id: decoded.id,
-          username: decoded.username,
-          email: decoded.email,
-          password: decoded.password
-        };
-      } catch (error) {
-        console.error("无效的 token", error);
-        this.$message.error("无效的 token，请重新登录");
-        this.$router.push('/login'); // 跳转到登录页
-      }
-    } else {
-      // this.$router.push('/login'); // 如果没有 token，跳转到登录页
-    }
+    // 页面加载时获取用户信息
+    this.getUserInfo();
   },
-    showEditAvatarModal() {
-      console.log("显示修改头像模态框");
-    },
-    toggleEditName() {
-      this.editingName = !this.editingName;
-    },
-    saveName() {
-      this.userInfo.name = this.newName;
-      this.editingName = false;
-      this.newName = '';
-      this.saveUserInfo();
-    },
-    copyToClipboard(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        this.$message.success("已复制到剪贴板");
-      }).catch(err => {
-        this.$message.error("复制失败，请重试");
-      });
-    },
-    bindPhoneNumber() {
-      this.$prompt('请输入手机号', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPattern: /^1[3-9]\d{9}$/,
-        inputErrorMessage: '手机号格式不正确'
-      }).then(({ value }) => {
-        axios.post('/api/bind-phone-number', { phoneNumber: value })
-          .then(response => {
-            this.userInfo.phoneNumber = value;
-            this.$message.success('手机号绑定成功');
-          })
-          .catch(error => {
-            this.$message.error('手机号绑定失败，请重试');
-          });
-      }).catch(() => {
-        this.$message.info('已取消绑定');
-      });
-    },
-    bindEmail() {
-      this.$prompt('请输入邮箱地址', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        inputErrorMessage: '邮箱格式不正确'
-      }).then(({ value }) => {
-        axios.post('/api/bind-email', { email: value })
-          .then(response => {
-            this.userInfo.email = value;
-            this.$message.success('邮箱绑定成功');
-          })
-          .catch(error => {
-            this.$message.error('邮箱绑定失败，请重试');
-          });
-      }).catch(() => {
-        this.$message.info('已取消绑定');
-      });
-    },
-    setPassword() {
-      this.$prompt('请输入新密码', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-        inputErrorMessage: '密码格式不正确（至少8位，包含大小写字母和数字）'
-      }).then(({ value }) => {
-        axios.post('/api/set-password', { password: value })
-          .then(response => {
-            this.userInfo.password = value;
-            this.$message.success('密码设置成功');
-          })
-          .catch(error => {
-            this.$message.error('密码设置失败，请重试');
-          });
-      }).catch(() => {
-        this.$message.info('已取消设置');
-      });
-    },
-    confirmCancellation() {
-      this.$confirm('确定要注销账号吗？此操作不可逆。', '警告', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        axios.post('/api/cancel-account')
-          .then(response => {
-            this.userInfo.cancellation = "已注销";
-            this.$message.success('账号已注销');
-          })
-          .catch(error => {
-            this.$message.error('账号注销失败，请重试');
-          });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消注销'
-        });
-      });
-    },
-    saveUserInfo() {
-      axios.post('/api/save-user-info', this.userInfo)
-        .then(response => {
-          this.$message.success('用户信息保存成功');
+  methods: {
+    // 获取用户信息
+    getUserInfo() {
+      axios
+        .get("http://localhost:5173/api/user", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
-        .catch(error => {
-          this.$message.error('用户信息保存失败，请重试');
+        .then((response) => {
+          const data = response.data;
+          if (data.code) {
+            this.userInfo = {
+              id: data.data.id,
+              username: data.data.username,
+              email: data.data.email,
+              phoneNumber: data.data.phoneNumber,
+            };
+          } else {
+            this.$message.error(data.msg || "获取用户信息失败！");
+          }
+        })
+        .catch((error) => {
+          console.error("获取用户信息失败：", error);
+          this.$message.error("获取用户信息失败，请稍后重试！");
         });
     },
+
+    // 复制用户ID
+    copyToClipboard(value) {
+      navigator.clipboard
+        .writeText(value)
+        .then(() => {
+          this.$message.success("已复制到剪贴板！");
+        })
+        .catch(() => {
+          this.$message.error("复制失败，请手动复制！");
+        });
+    },
+
+    // 查看历史记录
     viewUserImages() {
-      const url = '/history/admins?page=1&size=10';
-      apiClient.get(url,{
-  headers: {
-    'Authorization': 'Bearer ' + localStorage.getItem('token')
-  }
-}).then(response => {
-  console.log(response.data);
-  const images = response.data.data;
-  if (Array.isArray(images)) {
-    this.$router.push({
-      name: 'UserImages',
-      query: { images: encodeURIComponent(JSON.stringify(images)) }
-    });
-  } else {
-    this.$router.push({ name: 'UserImages' });
-    this.$message.error('历史记录数据格式不正确');
-  }
-}).catch(error => {
-  console.error(error); // 输出错误
-  this.$router.push({ name: 'UserImages' });
-  this.$message.error('获取历史记录失败，请重试');
-});
+      axios
+        .get("/history/admins?page=1&size=10", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        })
+        .then((response) => {
+          const images = response.data.data;
+          if (Array.isArray(images)) {
+            this.$router.push({
+              name: "UserImages",
+              query: { images: encodeURIComponent(JSON.stringify(images)) },
+            });
+          } else {
+            this.$message.error("历史记录数据格式不正确！");
+          }
+        })
+        .catch((error) => {
+          console.error("获取历史记录失败：", error);
+          this.$message.error("获取历史记录失败，请稍后重试！");
+        });
+    },
 
-}
-
-  }
+    // 确认注销账号
+    confirmCancellation() {
+      this.$confirm("确定要注销账号吗？此操作不可逆！", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          axios
+            .post("/api/cancel-account", {}, {
+              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            })
+            .then(() => {
+              this.userInfo.cancellation = "已注销";
+              this.$message.success("账号已注销！");
+              this.$router.push("/login");
+            })
+            .catch(() => {
+              this.$message.error("注销失败，请稍后重试！");
+            });
+        })
+        .catch(() => {
+          this.$message.info("已取消注销操作！");
+        });
+    },
+  },
 };
 </script>
-
 <style scoped>
 .common-layout {
   min-height: 100vh;
@@ -347,25 +250,11 @@ methods: {
   margin-right: 10px;
 }
 
-.edit-btn {
-  float: right;
-}
 
 .copy-btn {
   float: right;
 }
 
-.bind1-btn {
-  float: right;
-}
-
-.bind2-btn {
-  float: right;
-}
-
-.passward-btn {
-  float: right;
-}
 
 .cancel-btn {
   float: right;

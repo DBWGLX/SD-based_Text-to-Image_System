@@ -1,21 +1,22 @@
 <template>
   <div class="login">
     <h2>Login</h2>
-    <form @submit.prevent="login">
-      <div>
+    <form @submit.prevent="login" class="form-grid">
+      <div class="form-item username">
         <label for="username">Username:</label>
         <input type="text" v-model="username" required />
+        <div class="col"></div>
       </div>
-      <div>
+      <div class="form-item password">
         <label for="password">Password:</label>
         <input type="password" v-model="password" required />
       </div>
-      <div>
+      <div class="form-item otp">
         <label for="otp">OTP:</label>
         <input type="text" v-model="otp" required />
-      </div>
-      <div>
-        <button type="button" @click="getOtp">获取验证码</button>
+        <div>
+          <button type="button" @click="getOtp">获取验证码</button>
+        </div>
       </div>
       <button type="submit">登录</button>
     </form>
@@ -107,6 +108,14 @@ form {
   gap: 10px;
 }
 
+label {
+  width: 60px; /* 固定宽度，确保对齐 */
+  text-align: left; /* 右对齐 */
+  margin-right: 10px;
+}
+
+
+
 input {
   padding: 10px;
   border: 1px solid #ddd;
@@ -118,6 +127,12 @@ input {
 input:focus {
   border-color: royalblue;
   outline: none;
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 button {
@@ -134,3 +149,4 @@ button:hover {
   background-color: #0074b5;
 }
 </style>
+
