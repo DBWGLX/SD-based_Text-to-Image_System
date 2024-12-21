@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <h2>Login</h2>
+    <h2 class="login_text">Login</h2>
     <form @submit.prevent="login" class="form-grid">
       <div class="form-item username">
         <label for="username">Username:</label>
@@ -104,6 +104,10 @@ export default {
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   background-color: #f9f9f9;
+}
+
+.login_text {
+  margin-bottom: 20px;
 }
 
 form {

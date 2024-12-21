@@ -14,7 +14,7 @@
               type="text"
               v-model="prompt"
               placeholder="Input your prompt, like: masterpiece, best quality,"
-              class="text-input"
+              class="text-input enhanced-input"
             />
             <!-- image的negative_prompt -->
             <label for="negative_prompt" class="input-label">Negative Prompt:</label>
@@ -23,7 +23,7 @@
               type="text"
               v-model="negative_prompt"
               placeholder="Input your negative prompt, like: lowres, bad anatomy, bad hands, text, error, mssing fingers,extra digits, fewer digits, cropped, worst quality,low quality,normal quality,jpeg artifacts, signature, watermark,username, blurry"
-              class="text-input"
+              class="text-input enhanced-input"
             />
             <!-- image的num_inference_steps -->
             <div class="input-group">
@@ -98,7 +98,7 @@
                 id="seed"
                 type="number"
                 v-model="seed"
-                class="text-input"
+                class="text-input enhanced-input"
                 min="0"
                 max="999999"
               />
@@ -439,6 +439,31 @@ watch: {
 </script>
 
 <style scoped>
+.enhanced-input {
+  width: 100%;
+  padding: 0px 12px;
+  margin: 0px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.enhanced-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.enhanced-input:hover {
+  border-color: #6c757d;
+}
+
+.enhanced-input::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
 .body {
   padding: 20px;
 }
@@ -469,7 +494,7 @@ watch: {
 .container {
   display: flex;
   flex: 1;
-  gap: 20px;
+  gap: 30px;
 }
 
 .left {
