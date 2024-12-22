@@ -234,15 +234,18 @@ export default {
       this.isGenerating = true; // 设置为正在生成
       this.isGenerateDisable = true;
       try {
-        const token = localStorage.getItem('authToken');
+        const userId = localStorage.getItem('userId');
+        const token = localStorage.getItem('jwt');
         console.log('Token:', token); 
         const response = await fetch('http://172.30.207.108:5000/generate', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : '',
+            'Authorization': `Bearer ${token}`,  // 附加 JWT
+            //'Authorization': token ? `Bearer ${token}` : '',
           },
           body: JSON.stringify({
+            userId: userId,
             prompt: this.prompt,
             negative_prompt: this.negative_prompt,
             num_inference_steps: this.num_inference_steps,

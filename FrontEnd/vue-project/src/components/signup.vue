@@ -112,7 +112,7 @@ const sendVerificationCode = async () => {
   isSendingCode.value = true;
 
   try {
-    const response = await fetch("http://localhost:8080/verify", {
+    const response = await fetch("http://localhost:8081/verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.value }),
@@ -140,7 +140,7 @@ const handleSubmit = async () => {
   if (!validateForm()) return;
 
   try {
-    const response = await axios.post("http://localhost:8080/register", {
+    const response = await axios.post("http://localhost:8081/register", {
       username: username.value,
       password: password.value,
       email: email.value,
