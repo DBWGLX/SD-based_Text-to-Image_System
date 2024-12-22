@@ -234,18 +234,15 @@ export default {
       this.isGenerating = true; // 设置为正在生成
       this.isGenerateDisable = true;
       try {
-        const userId = localStorage.getItem('userId');
-        const token = localStorage.getItem('jwt');
+        const token = localStorage.getItem('authToken');
         console.log('Token:', token); 
         const response = await fetch('http://172.30.207.108:5000/generate', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,  // 附加 JWT
-            //'Authorization': token ? `Bearer ${token}` : '',
+            'Authorization': token ? `Bearer ${token}` : '',
           },
           body: JSON.stringify({
-            userId: userId,
             prompt: this.prompt,
             negative_prompt: this.negative_prompt,
             num_inference_steps: this.num_inference_steps,
@@ -259,17 +256,23 @@ export default {
         if (!response.ok) {
           throw new Error(`网络响应不是一个 200: ${response.statusText}`);
         }
-        
+        console.log(response)
         const data = await response.json();
+        console.log(data)
 
         if( data && data.image_path) {
           this.imageUrl = data.image_path;
         }else {
           throw new Error('未能获取有效的imageUrl');
         }
-        // const imageBlob = await response.blob(); // 将响应解析为 Blob 对象
-        // this.generatedImageData = imageBlob;
-        // this.imageUrl = URL.createObjectURL(imageBlob); // 生成可用于 img 标签的 URL
+        const imageResponse = await fetch(this.imageUrl);
+        if (!imageResponse.ok) {
+          throw new Error('无法加载图片');
+        }
+
+        // 将图片数据转为 Blob
+        const imageBlob = await imageResponse.blob();
+        this.generatedImageData = imageBlob;
       } catch (error) {
         console.error('请求失败:', error);
         alert('生成图像失败，请重试' + error.message);
