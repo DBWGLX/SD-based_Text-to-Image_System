@@ -76,14 +76,6 @@
               </div>
 
               <el-divider border-style="double" />
-
-              <div class="profile-item">
-                <div class="item-title">
-                  <el-text class="mx-1">账号注销</el-text>
-                </div>
-                <div class="item-value">{{ userInfo.cancellation }}</div>
-                <el-button type="danger" plain class="cancel-btn" @click="confirmCancellation">注销</el-button>
-              </div>
             </div>
           </div>
         </el-main>
@@ -177,32 +169,6 @@ export default {
         .catch((error) => {
           console.error("获取历史记录失败：", error);
           this.$message.error("获取历史记录失败，请稍后重试！");
-        });
-    },
-
-    // 确认注销账号
-    confirmCancellation() {
-      this.$confirm("确定要注销账号吗？此操作不可逆！", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          axios
-            .post("/api/cancel-account", {}, {
-              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            })
-            .then(() => {
-              this.userInfo.cancellation = "已注销";
-              this.$message.success("账号已注销！");
-              this.$router.push("/login");
-            })
-            .catch(() => {
-              this.$message.error("注销失败，请稍后重试！");
-            });
-        })
-        .catch(() => {
-          this.$message.info("已取消注销操作！");
         });
     },
   },
