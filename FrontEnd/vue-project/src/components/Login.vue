@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <h2>Login</h2>
+    <h2 class="login_text">Login</h2>
     <form @submit.prevent="login" class="form-grid">
       <div class="form-item username">
         <label for="username">Username:</label>
@@ -65,11 +65,15 @@ export default {
       });
 
       // 检查后端返回的数据
-      if (response.data.code == true) { // 假设后端成功时的状态码为200
+      if (response.data.code === true) { // 假设后端成功时的状态码为200
+        console.log(response.data);
+
         // 将 JWT 存入 localStorage
-        const token = response.data.data; // 根据后端返回的 JSON 结构获取 token
-        localStorage.setItem('authToken', token);
-        
+        const resp = response.data.data; // 根据后端返回的 JSON 结构获取 token
+        const jwt = resp.jwt;
+        const userId = resp.userId;
+        localStorage.setItem('jwt', jwt);
+        localStorage.setItem('userId', userId);
         // 将用户的登录状态记录
         localStorage.setItem('isAuthenticated', 'true');
         
@@ -100,6 +104,10 @@ export default {
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   background-color: #f9f9f9;
+}
+
+.login_text {
+  margin-bottom: 20px;
 }
 
 form {

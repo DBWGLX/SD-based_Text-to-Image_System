@@ -19,7 +19,8 @@
 
 **验证码验证，有效期10分钟：**
 /api/auth/login
-![image](https://github.com/user-attachments/assets/a75e835b-7eaa-4947-b91b-1a0fdd6dce82)
+![image](https://github.com/user-attachments/assets/732736dd-1106-4c35-9033-ea1783b9eb3c)
+
 
 
 
