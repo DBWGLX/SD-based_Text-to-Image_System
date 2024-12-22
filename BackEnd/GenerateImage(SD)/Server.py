@@ -30,31 +30,6 @@ def get_image(filename):
 
 
 
-# 验证 JWT
-sign_key = "text-to-image"
-def is_valid_jwt(token):
-    print(f"[DEBUG] texting Token")
-    try:
-        decoded_token = jwt.decode(token, sign_key, algorithms=["HS256"], options={"verify_exp": True})
-        print(f"[DEBUG] Decoded Token: {decoded_token}")
-        return True
-    except ExpiredSignatureError as e:
-        print(f"[DEBUG] Token has expired: {e}")
-        return False
-    except InvalidTokenError as e:
-        print(f"[DEBUG] Invalid token error: {e}")
-        return False
-
-def debug_jwt(token):
-    try:
-        header = jwt.get_unverified_header(token)
-        payload = jwt.decode(token, options={"verify_signature": False})
-        print(f"[DEBUG] Header: {header}")
-        print(f"[DEBUG] Payload: {payload}")
-    except Exception as e:
-        print(f"[DEBUG] Error decoding parts: {e}")
-
-
 # 加载模型
 pipe = StableDiffusionPipeline.from_single_file(
     "F:\\2024\\coding\\safetensors\\CheckpointYesmix_v50.safetensors",
@@ -73,22 +48,22 @@ def generate_image():
     data = request.json
 
     # 1.验证token
-    # jwt_token = request.headers.get('Authorization')
-    # # print(f"Token received: {jwt_token}")
-    # # 检查 Authorization 字段是否为空且以 'Bearer ' 开头
-    # if jwt_token and jwt_token.startswith('Bearer '):
-    #     # token = jwt_token[7:]  # 去掉 'Bearer ' 前缀
-    #     token = jwt_token.split(" ")[1]
-    # else:
-    #     # Token 无效或未提供，返回错误
-    #     return jsonify({'message': 'Token is missing or invalid'}), 401
+    jwt_token = request.headers.get('Authorization')
+    # print(f"Token received: {jwt_token}")
+    # 检查 Authorization 字段是否为空且以 'Bearer ' 开头
+    if jwt_token and jwt_token.startswith('Bearer '):
+        # token = jwt_token[7:]  # 去掉 'Bearer ' 前缀
+        token = jwt_token.split(" ")[1]
+    else:
+        # Token 无效或未提供，返回错误
+        return jsonify({'message': 'Token is missing or invalid'}), 401
 
-    # print(f"[DEBUG]1.Token: {token}")
+    print(f"[DEBUG]1.Token: {token}")
 
-    # debug_jwt(token)
+    debug_jwt(token)
 
-    # if not is_valid_jwt(token):
-    #     return jsonify({"error": "Invalid or expired JWT token"}), 403
+    if not is_valid_jwt(token):
+        return jsonify({"error": "Invalid or expired JWT token"}), 403
 
     print("[DEBUG]token verified")
     # 提取参数

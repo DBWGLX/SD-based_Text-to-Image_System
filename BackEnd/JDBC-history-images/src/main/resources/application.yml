@@ -1,5 +1,11 @@
 server:
+<<<<<<< HEAD
   port: 8083
+=======
+  address: 0.0.0.0
+  port: 8083  # 主应用的端口
+
+>>>>>>> 588987b36edee894873d91f74960ec8c4750ac68
 spring:
   #数据库连接信息
   datasource:
