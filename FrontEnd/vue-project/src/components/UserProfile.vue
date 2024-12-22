@@ -112,7 +112,7 @@ export default {
         return;
       }
       axios
-        .get("http://localhost:8080/api/user/" + userId)
+        .get("http://localhost:8083/api/user/" + userId)
         .then((response) => {
           const data = response.data;
           console.log("用户信息：", data);
@@ -151,7 +151,7 @@ export default {
     viewUserImages() {
       const userId = localStorage.getItem("userId");
       axios
-        .get("http://localhost:8080/api/history/" + userId + "?page=1&size=10", {
+        .get("http://localhost:8083/api/history/" + userId + "?page=1&size=10", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
         .then((response) => {

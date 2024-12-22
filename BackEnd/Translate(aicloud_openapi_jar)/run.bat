@@ -1,1 +1,1 @@
-java jar .\aicloud-openapi.jar
+java -jar .\aicloud-openapi.jar

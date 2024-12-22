@@ -41,7 +41,7 @@ export default {
   methods: {
     async getOtp() {
       try {
-        const response = await axios.post('http://localhost:8080/api/auth/login/totp', {
+        const response = await axios.post('http://localhost:8082/api/auth/login/totp', {
           username: this.username,
           password: this.password
         });
@@ -58,7 +58,7 @@ export default {
     async login() {
     try {
       // 向后端发送登录请求
-      const response = await axios.post('http://localhost:8080/api/auth/login', {
+      const response = await axios.post('http://localhost:8082/api/auth/login', {
         username: this.username,
         password: this.password,
         otp: this.otp

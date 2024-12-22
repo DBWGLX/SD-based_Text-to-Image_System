@@ -11,9 +11,11 @@ import requests
 import jwt 
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 
+
 # 创建 Flask 应用
 app = Flask(__name__)
 CORS(app)  # 允许所有跨域请求
+
 
 # -1.配置静态文件夹 【# 设置图片文件夹路径】
 app.config['IMAGE_FOLDER'] = 'image'  
@@ -31,13 +33,26 @@ def get_image(filename):
 # 验证 JWT
 sign_key = "text-to-image"
 def is_valid_jwt(token):
+    print(f"[DEBUG] texting Token")
     try:
-        jwt.decode(token, sign_key, algorithms=["HS256"])
+        decoded_token = jwt.decode(token, sign_key, algorithms=["HS256"], options={"verify_exp": True})
+        print(f"[DEBUG] Decoded Token: {decoded_token}")
         return True
-    except ExpiredSignatureError:
+    except ExpiredSignatureError as e:
+        print(f"[DEBUG] Token has expired: {e}")
         return False
-    except InvalidTokenError:
+    except InvalidTokenError as e:
+        print(f"[DEBUG] Invalid token error: {e}")
         return False
+
+def debug_jwt(token):
+    try:
+        header = jwt.get_unverified_header(token)
+        payload = jwt.decode(token, options={"verify_signature": False})
+        print(f"[DEBUG] Header: {header}")
+        print(f"[DEBUG] Payload: {payload}")
+    except Exception as e:
+        print(f"[DEBUG] Error decoding parts: {e}")
 
 
 # 加载模型
@@ -58,14 +73,26 @@ def generate_image():
     data = request.json
 
     # 1.验证token
-    jwt_token = request.headers.get('Authorization')
-    print(f"Token received: {jwt_token}")
-    if not jwt_token or not is_valid_jwt(jwt_token):
-        return jsonify({"error": "Invalid or expired JWT token"}), 403
+    # jwt_token = request.headers.get('Authorization')
+    # # print(f"Token received: {jwt_token}")
+    # # 检查 Authorization 字段是否为空且以 'Bearer ' 开头
+    # if jwt_token and jwt_token.startswith('Bearer '):
+    #     # token = jwt_token[7:]  # 去掉 'Bearer ' 前缀
+    #     token = jwt_token.split(" ")[1]
+    # else:
+    #     # Token 无效或未提供，返回错误
+    #     return jsonify({'message': 'Token is missing or invalid'}), 401
 
-    print("token verified")
+    # print(f"[DEBUG]1.Token: {token}")
+
+    # debug_jwt(token)
+
+    # if not is_valid_jwt(token):
+    #     return jsonify({"error": "Invalid or expired JWT token"}), 403
+
+    print("[DEBUG]token verified")
     # 提取参数
-    user_id = data.get("user_id", "default_user")
+    userId = data.get("userId", "default_user")
     # 描述
     prompt = data.get("prompt", "masterpiece, best quality,")
     negative_prompt = data.get("negative_prompt", "lowres, bad anatomy, bad hands, text, error, mssing fingers,extra digits, fewer digits, cropped, worst quality,low quality,normal quality,jpeg artifacts, signature, watermark,username, blurry")
@@ -73,6 +100,7 @@ def generate_image():
 
     # 2.翻译
     # translator = Translator(from_lang="en", to_lang="zh-CN")
+    print("[DEBUG]2.translate")
     dataT = {
         "prompt": prompt
     }   
@@ -107,6 +135,7 @@ def generate_image():
     except requests.exceptions.RequestException as e:
         print("请求失败2:", e)
 
+    print("[DEBUG]translate verified")
 
     # 尺寸
     width = data.get("width", 512)
@@ -137,6 +166,7 @@ def generate_image():
     # 是否返回一个字典而不是简单的输出图像
     # return_dict = data.get("return_dict", True)
 
+    print("[DEBUG]3.image generate")
     # 3.生成图像 #
     # image = pipe(prompt, num_inference_steps=num_inference_steps, width=width, height=height).images[0]
     image = pipe(
@@ -159,28 +189,30 @@ def generate_image():
     # 保存图像
     image.save(image_path)
     
+    print("[DEBUG]4.image_history")
     # 向历史记录进程发送生成数据
-    # BACKEND_SERVER_URL = "http://127.0.0.1:5001/receive_image_details"
-    # try:
-    #     payload = {
-    #         "user_id": user_id,
-    #         "image_name": image_name,
-    #         "prompt": prompt,
-    #         "negative_prompt": negative_prompt,
-    #         "num_inference_steps": num_inference_steps,
-    #         "guidance_scale": guidance_scale,
-    #         "width": width,
-    #         "height": height,
-    #         "seed": seed
-    #     }
-    #     response = requests.post(BACKEND_SERVER_URL, json=payload)
-    #     if response.status_code == 200:
-    #         print("图片生成详情已成功发送到后端")
-    #     else:
-    #         print(f"后端返回错误: {response.status_code}, {response.text}")
-    # except Exception as e:
-    #     print(f"向后端发送数据时发生错误: {e}")
+    BACKEND_SERVER_URL = "http://127.0.0.1:8083/api/history/save"
+    try:
+        payload = {
+            "userId": userId,
+            "imageName": image_path,
+            "prompt": prompt,
+            "negativePrompt": negative_prompt,
+            "numInferenceSteps": num_inference_steps,
+            "guidanceScale": guidance_scale,
+            "width": width,
+            "height": height,
+            "seed": seed
+        }
+        response = requests.post(BACKEND_SERVER_URL, json=payload)
+        if response.status_code == 200:
+            print("图片生成详情已成功发送到后端")
+        else:
+            print(f"后端返回错误: {response.status_code}, {response.text}")
+    except Exception as e:
+        print(f"向后端发送数据时发生错误: {e}")
 
+    print("[DEBUG]3.SD verified")
     # 返回路径
     return send_file(image_path, mimetype='image/png')
 
