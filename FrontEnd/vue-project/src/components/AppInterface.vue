@@ -256,10 +256,17 @@ export default {
         if (!response.ok) {
           throw new Error(`网络响应不是一个 200: ${response.statusText}`);
         }
+        
+        const data = await response.json();
 
-        const imageBlob = await response.blob(); // 将响应解析为 Blob 对象
-        this.generatedImageData = imageBlob;
-        this.imageUrl = URL.createObjectURL(imageBlob); // 生成可用于 img 标签的 URL
+        if( data && data.image_path) {
+          this.imageUrl = data.image_path;
+        }else {
+          throw new Error('未能获取有效的imageUrl');
+        }
+        // const imageBlob = await response.blob(); // 将响应解析为 Blob 对象
+        // this.generatedImageData = imageBlob;
+        // this.imageUrl = URL.createObjectURL(imageBlob); // 生成可用于 img 标签的 URL
       } catch (error) {
         console.error('请求失败:', error);
         alert('生成图像失败，请重试' + error.message);
