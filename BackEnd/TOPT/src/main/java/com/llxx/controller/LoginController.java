@@ -11,10 +11,9 @@ import com.llxx.utils.TotpUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,5 +103,20 @@ public class LoginController {
             }
         }
         return  Result.error("验证码为空");// 需要先请求验证码
+    }
+
+    //判断jwt是否合法
+    @PostMapping("/api/auth/login/jwt")
+    public Result jwt(@RequestParam String jwt) {
+        if(!StringUtils.hasLength(jwt)){
+            return Result.error("jwt为空");
+        }
+        try {
+            JwtUtils.parseJWT(jwt);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("jwt不合法");
+        }
+        return Result.success();
     }
 }
