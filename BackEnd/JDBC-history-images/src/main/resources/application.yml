@@ -1,3 +1,7 @@
+server:
+  address: 0.0.0.0
+  port: 8083  # 主应用的端口
+
 spring:
   #数据库连接信息
   datasource:

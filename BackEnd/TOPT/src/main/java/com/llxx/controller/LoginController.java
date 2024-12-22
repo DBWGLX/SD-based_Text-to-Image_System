@@ -90,8 +90,8 @@ public class LoginController {
                     otpTimestampCache.remove(email);
                     log.info("验证成功");
                     Map<String,Object> map=new HashMap<>();
-                    map.put("userId",user.getUserId());
-                    map.put("email",user.getEmail());
+                    map.put("userId",loginUser.getUserId());
+                    map.put("email",loginUser.getEmail());
                     String jwt= JwtUtils.generateJwt(map);
                     JWTCache.put(loginUser.getUsername(),jwt);//缓存jwt
                     UserMsg userMsg=new UserMsg().setUserId(loginUser.getUserId()).setJwt(jwt);
