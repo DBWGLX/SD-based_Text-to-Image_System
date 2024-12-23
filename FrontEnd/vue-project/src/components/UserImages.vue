@@ -18,7 +18,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      images: [], // 图片数据
+      images: [], // 初始化为数组
     };
   },
   created() {
@@ -29,18 +29,34 @@ export default {
     async fetchHistory() {
       try {
         const token = localStorage.getItem("token"); // 从本地存储获取 JWT
-      
-        const response = await axios.get("/api/history", {
-          headers: { token },
-        });
+        const historyData = localStorage.getItem("historyImages"); // 从本地存储获取图片数据
 
-        // 校验返回结果格式
-        if (response.data.code) {
-          this.images = response.data.data || []; // 确保 data 是数组
-        } else {
-          console.error("获取历史记录失败：", response.data.msg);
-          alert(`获取历史记录失败：${response.data.msg}`);
+        if (!historyData) {
+          console.warn("没有找到历史图片数据");
+          return;
         }
+
+        const temp = JSON.parse(historyData); // 解析 JSON 数据
+        if (!Array.isArray(temp)) {
+          console.error("历史图片数据格式不正确");
+          return;
+        }
+
+        this.images = []; // 清空图片数据
+        console.log(temp.length);
+
+        // 遍历并添加图片数据到 `this.images`
+        for (let i = 0; i < temp.length; i++) {
+          const imageItem = {
+            id: temp[i].id,
+            imageUrl: temp[i].imageName,
+            description: "暂无描述",
+          };
+          console.log(imageItem); // 打印当前图片项
+          this.images.push(imageItem); // 添加图片到数组
+        }
+
+        console.log(this.images); // 打印最终图片数组
       } catch (error) {
         console.error("请求历史记录时出错：", error);
         alert("获取历史记录失败，请检查网络或重新登录");

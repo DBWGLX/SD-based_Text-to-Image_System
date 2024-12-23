@@ -72,7 +72,7 @@ export default {
         const resp = response.data.data; // 根据后端返回的 JSON 结构获取 token
         const jwt = resp.jwt;
         const userId = resp.userId;
-        localStorage.setItem('jwt', jwt);
+        localStorage.setItem('authToken', jwt);
         localStorage.setItem('userId', userId);
         // 将用户的登录状态记录
         localStorage.setItem('isAuthenticated', 'true');

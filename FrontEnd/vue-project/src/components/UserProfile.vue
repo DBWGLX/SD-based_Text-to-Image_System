@@ -158,9 +158,9 @@ export default {
           const images = response.data.data;
           console.log("历史记录：", images);
           if (Array.isArray(images)) {
+            localStorage.setItem("historyImages", JSON.stringify(images));
             this.$router.push({
-              name: "UserImages",
-              query: { images: encodeURIComponent(JSON.stringify(images)) },
+              name: "UserImages"
             });
           } else {
             this.$message.error("历史记录数据格式不正确！");

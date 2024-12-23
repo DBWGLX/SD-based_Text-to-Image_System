@@ -93,6 +93,7 @@ public class LoginController {
                     map.put("email",loginUser.getEmail());
                     String jwt= JwtUtils.generateJwt(map);
                     JWTCache.put(loginUser.getUsername(),jwt);//缓存jwt
+                    log.info(jwt);
                     UserMsg userMsg=new UserMsg().setUserId(loginUser.getUserId()).setJwt(jwt);
                     return  Result.success(userMsg);// 返回成功响应
                 } else {
@@ -107,11 +108,14 @@ public class LoginController {
 
     //判断jwt是否合法
     @PostMapping("/api/auth/login/jwt")
-    public Result jwt(@RequestParam String jwt) {
+    public Result Getjwt(@RequestParam String jwt) {
+        log.info("jwt");
         if(!StringUtils.hasLength(jwt)){
             return Result.error("jwt为空");
         }
         try {
+            log.info("jwt");
+            log.info(jwt);
             JwtUtils.parseJWT(jwt);
         } catch (Exception e) {
             e.printStackTrace();

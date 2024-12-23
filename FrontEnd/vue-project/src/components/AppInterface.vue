@@ -234,7 +234,9 @@ export default {
       this.isGenerating = true; // 设置为正在生成
       this.isGenerateDisable = true;
       try {
+        const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('authToken');
+        console.log('userId:', userId); 
         console.log('Token:', token); 
         const response = await fetch('http://172.30.207.108:5000/generate', {
           method: 'POST',
@@ -243,6 +245,7 @@ export default {
             'Authorization': token ? `Bearer ${token}` : '',
           },
           body: JSON.stringify({
+            userId: userId,
             prompt: this.prompt,
             negative_prompt: this.negative_prompt,
             num_inference_steps: this.num_inference_steps,
@@ -251,6 +254,7 @@ export default {
             seed: this.seed !== '' ? this.seed : undefined, // 如果 seed 为空则不传递
             guidance_scale: this.guidance_scale,
           }),
+          
         });
 
         if (!response.ok) {
