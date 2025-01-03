@@ -11,7 +11,8 @@
 
 ## Project Structure
 
-![image](https://github.com/user-attachments/assets/7c949bca-ce8c-40e5-b973-8bb69ecb7dec)
+![image](https://github.com/user-attachments/assets/548f259d-c681-4306-8dff-87986c4fa623)
+
 
 
 ## Push Code Specifications 推送代码规范 (tmp ,New in 11.25)
